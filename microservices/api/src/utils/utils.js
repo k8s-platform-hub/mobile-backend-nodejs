@@ -1,6 +1,27 @@
 const request = require('request');
 const fcmKey = process.env.FCM_KEY;
 
+const dbAdminHeaders = {
+  'Content-Type': 'application/json',
+  'X-Hasura-User-Id': '1',
+  'X-Hasura-Role': 'admin'
+};
+
+const dbUrl = 'http://data.hasura/v1/query';
+
+const getRequestIdentity = (headers) => {
+  return (
+    headers
+    ?
+    {
+      role: headers['x-hasura-role'] ? header['x-hasura-role'] : 'anonymous',
+      user_id: headers['x-hasura-user-id']
+    }
+    :
+    {role: 'anonymous', user_id: null}
+  );
+}
+
 const sendPushNotification = (id) => {
   const fcmToken = getFcmToken(id);
   if (!fcmToken){
@@ -72,5 +93,8 @@ const getFcmToken = (id) => {
 }
 
 module.exports = {
-  sendPushNotification
+  sendPushNotification,
+  getRequestIdentity,
+  dbUrl,
+  dbAdminHeaders
 };

@@ -1,5 +1,4 @@
 const utils = require('../utils/utils');
-
 const express = require("express");
 const router = express.Router();
 const request = require('request');
@@ -9,31 +8,22 @@ router.get("/", (req, resp) => {
 });
 
 router.post('/register_device', (req, resp) => {
-  const reqHeaders = req.headers;
-  const role = reqHeaders ? reqHeaders['x-hasura-role'] : 'anonymous';
-  if (!role || role === 'anonymous') {
-    resp.status(404).send({ error: 'unauthorized'});
+  const identity = utils.getRequestIdentity(req.headers);
+
+  if (identity.role === 'anonymous' ) {
+    resp.status(401).send({ error: 'unauthorized'});
     return;
   }
-  const userId = reqHeaders['x-hasura-user-id'];
 
   if(!req.body || (req.body && !req.body.token)){
     resp.status(400).send({
-      'error': 'missing or invalid payload'
+      'error': 'invalid payload'
     });
   }
 
-  const token = req.body.token;
-  let dataUrl = 'http://data.hasura/v1/query';
-  let headers = {
-    'Content-Type': 'application/json',
-    'X-Hasura-User-Id': '1',
-    'X-Hasura-Role': 'admin'
-  };
-  const username = req.body.username;
   const options = {
-    'url': dataUrl,
-    'headers' : headers,
+    'url': utils.dbUrl,
+    'headers' : utils.dbAdminHeaders,
     'method': 'POST',
     'body': JSON.stringify({
       'type': 'insert',
@@ -41,8 +31,8 @@ router.post('/register_device', (req, resp) => {
         'table': 'fcm_tokens',
         'objects': [
           {
-            'user_id': userId,
-            'token': token
+            'user_id': identity.user_id,
+            'token': req.body.token
           }
         ],
         'on_conflict': {
@@ -56,7 +46,7 @@ router.post('/register_device', (req, resp) => {
   };
   request(options, function (error, response, body) {
     if (error) {
-      console.log('Error adding the token to databse for user_id ' + userId);
+      console.log('Error adding the token to databse for user_id ' + identity.user_id);
       console.log(error);
       resp.status(500).send({
         'error': 'Error adding the token to database'
@@ -73,24 +63,27 @@ router.post('/register_device', (req, resp) => {
 });
 
 router.post('/test_push', (req, resp) => {
-  const reqHeaders = req.headers;
-  const role = reqHeaders ? reqHeaders['x-hasura-role'] : 'anonymous';
-  if (!role || role !== 'admin') {
-    resp.status(404).send({ 'error': 'unauthorized'});
+  const identity = utils.getRequestIdentity(req.headers);
+
+  if (identity.role === 'anonymous' ) {
+    resp.status(401).send({ error: 'unauthorized'});
     return;
   }
+
   if (!req.body || !req.body.id) {
     resp.status(400).send({
-      'error': 'absent or invalid payload'
+      'error': 'invalid payload'
     });
     return;
   }
-  if (utils.sendPushNotification(id) == false){
+
+  if (utils.sendPushNotification(req.body.id) == false){
     resp.status(500).send({
       'error': 'either the user_id is invalid or the user has not registered'
     });
     return;
   }
+  console.log(body);
   resp.send(201).send({
     'success': 'push notification queued'
   });
