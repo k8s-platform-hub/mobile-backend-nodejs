@@ -16,8 +16,6 @@ const io = socketClient(server);
 const serverRoutes = require("./routes/routes");
 app.use(serverRoutes);
 
-
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
