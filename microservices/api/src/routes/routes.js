@@ -77,7 +77,9 @@ router.post('/test_push', (req, resp) => {
     return;
   }
 
-  if (utils.sendPushNotification(req.body.id) == false){
+  const dataPayload = req.body.payload ? req.body.payload : {'title': 'NotifTitle', 'body': 'NotifBody'};
+
+  if (utils.sendPushNotification(req.body.id, dataPayload) == false){
     resp.status(500).send({
       'error': 'either the user_id is invalid or the user has not registered'
     });

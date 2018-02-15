@@ -22,7 +22,8 @@ const getRequestIdentity = (headers) => {
   );
 }
 
-const sendPushNotification = (id) => {
+const sendPushNotification = (id, payload) => {
+  const dataPayload = payload || {'title': 'NotifTitle', 'body': 'NotifBody'};
   const fcmToken = getFcmToken(id);
   if (!fcmToken){
     return false;
@@ -36,11 +37,8 @@ const sendPushNotification = (id) => {
     'headers' : headers,
     'method': 'POST',
     'body': JSON.stringify({
-      'to': fcmToken,
-      'data': {
-        'title': 'Notif Title',
-        'body': 'Notify Body Notif Body Notif Body Notif Body Notif Body'
-      }
+      'token': fcmToken,
+      'data': dataPayload
     })
   };
   return request(options, function (error, response, body) {
