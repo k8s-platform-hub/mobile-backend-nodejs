@@ -63,8 +63,6 @@ router.post('/register_device', (req, resp) => {
       });
       return;
     }
-    console.log(response);
-    console.log(body);
     resp.status(200).send({
       'message': 'success',
       'db_response': body
