@@ -72,6 +72,6 @@ const getFcmToken = (id) => {
   });
 }
 
-export {
+module.exports = {
   sendPushNotification
 };
