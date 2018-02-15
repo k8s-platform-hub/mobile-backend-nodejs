@@ -16,6 +16,10 @@ const io = socketClient(server);
 const serverRoutes = require("./routes/routes");
 app.use(serverRoutes);
 
+server.listen(8080, () =>{
+  console.log(`Listening on port 8080`);
+});
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -30,12 +34,4 @@ io.on("connection", socket => {
     socket.emit('message', ('The message you sent is: ' + msg));
   })
   socket.on("disconnect", () => console.log("Client disconnected"));
-});
-
-server.listen(8080, () =>{
-  console.log(`Listening on port 8080`);
-  var i = 1;
-  setInterval(() => {
-    console.log(i++);
-  }, 5000);
 });
