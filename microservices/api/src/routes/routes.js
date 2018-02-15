@@ -5,7 +5,7 @@ const router = express.Router();
 const request = require('request');
 
 router.get("/", (req, resp) => {
-  resp.send("Hello! The server is running.");
+  resp.send("Hello!! The server is running.");
 });
 
 router.post('/register_device', (req, resp) => {
