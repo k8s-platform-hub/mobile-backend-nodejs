@@ -67,6 +67,7 @@ router.post('/register_device', (req, resp) => {
       'message': 'success',
       'db_response': body
     });
+    return;
   });
 });
 
