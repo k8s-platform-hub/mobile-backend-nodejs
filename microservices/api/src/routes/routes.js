@@ -12,10 +12,17 @@ router.post('/register_device', (req, resp) => {
   const reqHeaders = req.headers;
   const role = reqHeaders ? reqHeaders['x-hasura-role'] : 'anonymous';
   if (!role || role === 'anonymous') {
-    resp.send({ error: 'unauthorized'});
+    resp.status(404).send({ error: 'unauthorized'});
     return;
   }
   const userId = reqHeaders['x-hasura-user-id'];
+
+  if(!req.body || (req.body && !req.body.token)){
+    resp.status(400).send({
+      'error': 'missing or invalid payload'
+    });
+  }
+
   const token = req.body.token;
   let dataUrl = 'http://data.hasura/v1/query';
   let headers = {
