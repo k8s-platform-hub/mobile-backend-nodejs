@@ -61,7 +61,7 @@ router.post('/register_device', (req, resp) => {
       'db_response': body
     });
   });
-}
+});
 
 router.post('/test_push', (req, resp) => {
   const reqHeaders = req.headers;
