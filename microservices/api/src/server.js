@@ -10,11 +10,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-const socketClient = require("socket.io");
-const io = socketClient(server);
-
 const serverRoutes = require("./routes/routes");
 app.use(serverRoutes);
+
+const socketClient = require("socket.io");
+const io = socketClient(server);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
