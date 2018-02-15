@@ -44,28 +44,26 @@ export default class LogScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-        <Content>
-          <View style={{flex: 0.1}} />
-          <View style={{flex: 0.2, flexDirection: 'row'}}>
-            <View style={{flex:0.75}}>
-              <Item regular>
+        <Content padder>
+          <View style={{flex: 0.25, flexDirection: 'row'}}>
+            <View style={{flex:0.78}}>
+              <Item rounded>
                 <Input placeholder='Message' value={this.state.msg} onChangeText={(text) => {
                   this.handleUsernameChange(text);
                 }}
                 />
               </Item>
             </View>
-            <View style={{flex: 0.05}} />
+            <View style={{flex: 0.02}} />
             <View style={{flex: 0.20}}>
-              <Button  onPress={this.props.sendMessageCallback(this.state.msg)} >
+              <Button dark onPress={this.props.sendMessageCallback(this.state.msg)} >
                 <Text>Send</Text>
               </Button>
             </View>
           </View>
-          <View style={{flex: 0.6}}>
+          <View style={{flex: 0.75}}>
             {renderMessages}
           </View>
-          <View style={{flex: 0.1}} />
         </Content>
       </Container>
     );
