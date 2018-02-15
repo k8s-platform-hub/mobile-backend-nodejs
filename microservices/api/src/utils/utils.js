@@ -16,7 +16,11 @@ const sendPushNotification = (id) => {
     'headers' : headers,
     'method': 'POST',
     'body': JSON.stringify({
-      "to"
+      'to': fcmToken,
+      'data': {
+        'title': 'Notif Title',
+        'body': 'Notify Body Notif Body Notif Body Notif Body Notif Body'
+      }
     })
   };
   return request(options, function (error, response, body) {
