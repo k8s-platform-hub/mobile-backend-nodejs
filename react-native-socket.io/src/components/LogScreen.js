@@ -1,7 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Header, Left, Body, Title, Right, Content, Container, Button, Text, Input, Item, Card, CardItem} from 'native-base'
-
+import {Header, Left, Body, Title, Right, Content, Container, Button, Text, Input, Item, Card, CardItem, Spinner} from 'native-base'
 
 export default class LogScreen extends React.Component {
 
@@ -9,8 +8,17 @@ export default class LogScreen extends React.Component {
     super(props);
     this.state = {
       messages: this.props.messages,
-      msg: ''
+      msg: '',
+      fontsLoaded: false
     };
+  }
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+    this.setState({ ...this.state, fontsLoaded: true});
   }
 
   componentWillReceiveProps() {
@@ -22,6 +30,14 @@ export default class LogScreen extends React.Component {
   }
 
   render(){
+    if (!this.state.fontsLoaded) {
+      return (
+        <Container>
+          <Spinner color='black' />
+        </Container>
+      )
+    }
+
     const renderMessages = this.state.messages.map((msg, i) => {
       return (
         <Card key={i}>
@@ -31,6 +47,7 @@ export default class LogScreen extends React.Component {
         </Card>
       );
     });
+
     return (
       <Container>
         <Header>
