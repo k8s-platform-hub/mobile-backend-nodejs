@@ -1,4 +1,4 @@
-import {sendPushNotification} from '../utils/utils';
+const utils = require('../utils/utils');
 
 const express = require("express");
 const router = express.Router();
@@ -76,7 +76,7 @@ router.post('/test_push', (req, resp) => {
     });
     return;
   }
-  if (sendPushNotification(id) == false){
+  if (utils.sendPushNotification(id) == false){
     resp.status(500).send({
       'error': 'either the user_id is invalid or the user has not registered'
     });
