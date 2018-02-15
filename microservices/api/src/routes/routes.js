@@ -55,6 +55,9 @@ router.post('/register_device', (req, resp) => {
     })
   };
   request(options, function (error, response, body) {
+    console.log(error);
+    console.log(response);
+    console.log(body);
     if (error) {
       console.log('Error adding the token to databse for user_id ' + userId);
       console.log(error);
