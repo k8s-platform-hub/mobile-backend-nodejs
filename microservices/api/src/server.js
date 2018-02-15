@@ -3,6 +3,13 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 
+const bodyParser = require('body-parser');
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 const socketClient = require("socket.io");
 const io = socketClient(server);
 
