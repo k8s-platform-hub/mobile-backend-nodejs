@@ -58,12 +58,12 @@ router.post('/register_device', (req, resp) => {
     if (error) {
       console.log('Error adding the token to databse for user_id ' + userId);
       console.log(error);
-      resp.status(500).json({
+      resp.status(500).send({
         'error': 'Error adding the token to database'
       });
       return;
     }
-    resp.status(500).send({
+    resp.status(200).send({
       'message': 'success',
       'db_response': body
     });
