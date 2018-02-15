@@ -1,5 +1,4 @@
 const request = require('request');
-
 const fcmKey = process.env.FCM_KEY;
 
 const sendPushNotification = (id) => {
