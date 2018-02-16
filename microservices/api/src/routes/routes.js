@@ -12,56 +12,52 @@ router.post('/register_device', (req, resp) => {
 
   if (identity.role === 'anonymous' ) {
     resp.status(401).send({ error: 'unauthorized'});
-    return;
   }
 
-  if(!req.body || (req.body && !req.body.token)){
+  else if(!req.body || (req.body && !req.body.token)){
     resp.status(400).send({
       'error': 'invalid payload'
     });
   }
-  console.log(utils.dbUrl);
-  console.log('Hey there');
-  console.log(req.body);
-  const options = {
-    'url': utils.dbUrl,
-    'headers' : utils.dbAdminHeaders,
-    'method': 'POST',
-    'body': JSON.stringify({
-      'type': 'insert',
-      'args': {
-        'table': 'fcm_tokens',
-        'objects': [
-          {
-            'user_id': identity.user_id,
-            'token': req.body.token
+  else {
+    const options = {
+      'url': utils.dbUrl,
+      'headers' : utils.dbAdminHeaders,
+      'method': 'POST',
+      'body': JSON.stringify({
+        'type': 'insert',
+        'args': {
+          'table': 'fcm_tokens',
+          'objects': [
+            {
+              'user_id': identity.user_id,
+              'token': req.body.token
+            }
+          ],
+          'on_conflict': {
+            'action': 'update',
+            'constraint_on': [
+              'user_id'
+            ]
           }
-        ],
-        'on_conflict': {
-          'action': 'update',
-          'constraint_on': [
-            'user_id'
-          ]
         }
+      })
+    };
+    request(options, function (error, response, body) {
+      if (error) {
+        console.log('Error adding the token to databse for user_id ' + identity.user_id);
+        console.log(error);
+        resp.status(500).send({
+          'error': 'Error adding the token to database'
+        });
+      } else {
+        resp.status(200).send({
+          'message': 'success',
+          'db_response': body
+        });
       }
-    })
-  };
-  request(options, function (error, response, body) {
-    if (error) {
-      console.log('Error adding the token to databse for user_id ' + identity.user_id);
-      console.log(error);
-      resp.status(500).send({
-        'error': 'Error adding the token to database'
-      });
-      return;
-    }
-    console.log(body);
-    resp.status(200).send({
-      'message': 'success',
-      'db_response': body
     });
-    return;
-  });
+  }
 });
 
 router.post('/test_push', (req, resp) => {
