@@ -20,7 +20,7 @@ router.post('/register_device', (req, resp) => {
       'error': 'invalid payload'
     });
   }
-  
+  console.log(utils.dbUrl);
   const options = {
     'url': utils.dbUrl,
     'headers' : utils.dbAdminHeaders,
