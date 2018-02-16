@@ -20,8 +20,7 @@ router.post('/register_device', (req, resp) => {
       'error': 'invalid payload'
     });
   }
-
-
+  
   const options = {
     'url': utils.dbUrl,
     'headers' : utils.dbAdminHeaders,
@@ -45,8 +44,6 @@ router.post('/register_device', (req, resp) => {
       }
     })
   };
-
-
   request(options, function (error, response, body) {
     if (error) {
       console.log('Error adding the token to databse for user_id ' + identity.user_id);
@@ -56,6 +53,7 @@ router.post('/register_device', (req, resp) => {
       });
       return;
     }
+    console.log(body);
     resp.status(200).send({
       'message': 'success',
       'db_response': body
