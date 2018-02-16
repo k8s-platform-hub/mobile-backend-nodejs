@@ -14,7 +14,7 @@ const getRequestIdentity = (headers) => {
     headers
     ?
     {
-      role: headers['x-hasura-role'] ? header['x-hasura-role'] : 'anonymous',
+      role: headers['x-hasura-role'] ? headers['x-hasura-role'] : 'anonymous',
       user_id: headers['x-hasura-user-id']
     }
     :
