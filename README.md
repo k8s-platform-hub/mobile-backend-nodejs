@@ -1,120 +1,105 @@
-# Mobile Backend
+## Description
 
-## Using backend features
+Mobile backend project written in NodeJS using Express. Deploy to cloud using a simple git push.
 
-Every application almost always requires a database and some kind of authentication. However, if yours doesn't, you can skip this section.
+This is an ideal project to start with if:
 
-Hasura makes it easy to add some common backend features to your apps:
-- Add auth via different providers [[features](https://hasura.io/features/auth)]
-- Integrate with a database [[features](https://hasura.io/features/data)]
-- Add file upload/download[[features](https://hasura.io/features/filestore)]
+- If you are a front-end mobile developer familiar with building UI
+- You are looking to easily deploy nodeJS server to cloud
+- If you are looking to implement push notifications or socket.io with nodeJS.
 
+Also a tutorial for mobile developers who are planning to go fullstack.
 
-### API console
+## Deployment guide
 
-Hasura gives you a web UI to manage your database and users. You can also explore the Hasura APIs and automatically generate API code in the language of your choice.
-
-#### Run this command inside the project directory
+1. Quickstart this project. Run this command.
 
 ```bash
+$ hasura quickstart mobile-backend-nodejs
+```
+
+2. Simply git push to the hasura remote from the project directory to deploy the mobile server.
+
+```
+$ git add .
+$ git commit -m "First deployment"
+$ git push hasura master
+```
+
+3. The server will be deployed to `https://api.<CLUSTER-NAME>.hasura-app.io/`. Run `hasura cluster status` to find your cluster name.
+
+## API-Console
+
+Hasura provides you with a web UI to manage your backend. Just run the following command from your backend.
+
+```
 $ hasura api-console
 ```
 
 ![api-explorer.png](https://filestore.hasura.io/v1/file/463f07f7-299d-455e-a6f8-ff2599ca8402)
 
-## Adding Environment Variables
 
-There are some keys/tokens that your server needs, but are not safe to put in your git repository. These are mainly your passwords, secret keys and third party API tokens.
+## Using the database
 
-Hasura gives you a simple way of managing your secrets directly on the cloud(via Kubernetes secrets).
+1. Creating a table: Go to `Data` tab in the menu bar and click on create table as shown below
+  ~[Image TODO]
 
-Check the [docs](https://docs.hasura.io/0.15/manual/project/secrets.html) to see how to add secrets.
+2. Once you have created the table, go to the `API-Explorer` tab and try building a query with the query builder. Also add the admin token because you haven't added anonymous permissions on the table.
+  ~[Image TODO]
 
-## Implementing Push Notifications
+3. Since you have not added any permissions for the table, you need to add admin token Hit `send`.
 
-This project already contains boilerplate code to push notifications to your applications using [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/). The workflow is as follows:
+4. You have successfully made a data query without the hassle of configuring a database.
 
-1. Create a project on Firebase Console and add your API key to the secrets. Run the following command from the project directory.
+5. Now if you want to make this same query in your code, there is a code generator that builds code snippets of the exact same query in your preferred language. Click on `Generate API Code`
+  ~[Image TODO]
 
-```bash
-$ hasura secret update fcm.key <FCM_API_KEY>
-```
+6. Try playing around with the query builder. You can build a lot of complex queries. You can also add different permissions from `Modify Table`.
 
-2. When your user signs up on your application, you post the firebase registration token to the `/register_device` endpoint in the following way.
+## Using Authentication
 
-```javascript
-// headers
-{
-  'Content-Type':'application/json',
-  'Authorization':'Bearer <AUTH_TOKEN>'
-}
+1. Go back to the API explorer. Click on `Username-Password > Signup` under `Auth` on the left panel.
 
-// payload
-{
-  'token': '<FIREBASE_TOKEN>'
-}
-```
+2. Modify the username and password in the request body and hit send.
+  ~[Image TODO]
 
-3. The server will store the the token and the user_id in the database.
-4. Whenever you wish to send push the notification to the app being used by a user with a particular `user_id`, you simply call the function, `utils.sendPushNotification()` function which returns true on success and false on failure.
+3. You just created a user.
 
-```javascript
+4. Now click on `Username-Password > Login`. Try logging in with the same username and password.
 
-const utils = require('./utils/utils');
+5. You will get success JSON body in response. You can use the auth token from this body to authenticate your users to the data requests. (Just like we added the admin token to authenticate the data query that we built in the data section)
 
-const dataPayload = {
-  'title': 'NotifTitle',
-  'body': 'NotifBody'
-};
+6. Click on generate API code in the query builder to build the same query in your preferred language.
 
-const success = utils.sendPushNotification(user_id, dataPayload);
-```
+7. In your mobile application, you might want to store this token locally so that your users' session is persisted and they do not have to login everytime they open the app.
 
-To learn more about Firebase Cloud Messaging, check out the [docs](https://firebase.google.com/docs/cloud-messaging/concept-options).
+## Push Notifications
 
-## Socket.IO
+A push notification is a message that is pushed from the server to a mobile device. App managers can send messages to clients whenever they want. Push notifications are also used for having realtime support in your application.
 
-Sometimes you will want your client to open a full duplex connection with the server. Some of the use cases are chats, games, some realtime feature etc. What better way to do it than [Socket.IO](https://socket.io)!
+### Android
 
-We have also implemented socket.io in this server. You can simply open a socket connection to the url `https://api.<clustername>.hasura-app.io` and it will work.
+We will show how to use push notifications to apps in Android.
 
-To learn more about Socket.IO, please [check this out](https://socket.io/get-started/chat/).
+1. Create a project on Firebase, add the android application to the project, add the firebase service to the android application and obtain the firebase API key. ([Follow the docs](https://firebase.google.com/docs/cloud-messaging/) you haven't done this before)
 
-## Deployment Guide
-
-1. (Skip this step if you do not wish to use push notifications) Mention FCM_KEY as an environment variable in the k8s.yaml. To do this, run the following command from the root directory of the project.
+2. To add the firebase API key to environment variables, run the following commands from the project directory.
 
 ```bash
 $ cp microservices/api/k8s.fcm.yaml microservices/api/k8s.yaml
-```
-
-2. Deploy the server to cloud.
-```
-$ git add .
-$ git commit -m "Deploying the server"
+$ hasura secret update fcm.key "<YOUR_FIREBASE_API_KEY>"
+$ git add . && git commit -m "Mentionied the FIREBASE_KEY in k8s.yaml"
 $ git push hasura master
 ```
 
-## Modifying the code and adding dependencies
+3. Now whenever you sign up a user in your application, you should store their device's firebase token to database to associate it with their user id. Just send the following with payload with the following headers to the following endpoint.
 
-The sourcecode for this server lives in the `microservices/api/src` directory. You can modify it however you want.
+{JAVA CODE SNIPPET Jaison TODO}
 
-To add dependencies, you can add the dependencies to `microservices/api/src/package.json` or just go to `microservices/api/src` directory and run `npm install <dependency> --save`.
+3. Now you can push data from your server to the application with a simple function call. Simply call the function `utils.sendPushNotifcation` with the 'user_id'.
 
-For example, if you need to install `request`, you will run `$ npm install request --save` from the `microservices/api/src` directory
-
-## View server logs
-
-If the push fails with an error `Updating deployment failed`, or the URL is showing `502 Bad Gateway`/`504 Gateway Timeout`, follow the instruction on the page and check the logs to see what is going wrong with the microservice:
-
-```bash
-# see status of microservice app
-$ hasura microservice list
-
-# get logs for the api
-$ hasura microservice logs api
+```
+const fcmAPIKey = 
 ```
 
-## Support
-
-If you find a bug, or wish to request a feature, please raise an issue [here](https://github.com/hasura/mobile-backend-nodejs)
+4.
