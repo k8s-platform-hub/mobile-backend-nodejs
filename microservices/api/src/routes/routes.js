@@ -21,6 +21,7 @@ router.post('/register_device', (req, resp) => {
     });
   }
   console.log(utils.dbUrl);
+  console.log(utils.dbAdminHeaders);
   console.log(req.body);
   const options = {
     'url': utils.dbUrl,
