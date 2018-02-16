@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const app = express();
-const server = http.createServer(app);
+const server = http.Server(app);
 
 const bodyParser = require('body-parser');
 
