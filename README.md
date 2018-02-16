@@ -53,6 +53,7 @@ $ hasura secret update fcm.key <FCM_API_KEY>
 {
   'token': '<FIREBASE_TOKEN>'
 }
+```
 
 3. The server will store the the token and the user_id in the database.
 4. Whenever you wish to send push the notification to the app being used by a user with a particular `user_id`, you simply call the function, `utils.sendPushNotification()` function which returns true on success and false on failure.
