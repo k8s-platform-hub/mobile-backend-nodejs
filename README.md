@@ -5,7 +5,7 @@ Mobile backend project written in NodeJS using Express. Deploy to cloud using a 
 This is an ideal project to start with if:
 
 - If you are a front-end mobile developer familiar with building UI
-- You are looking to easily deploy nodeJS server to cloud
+- If you are looking to easily deploy nodeJS server to cloud
 - If you are looking to implement push notifications or socket.io with nodeJS.
 
 Also a tutorial for mobile developers who are planning to go fullstack.
@@ -96,10 +96,64 @@ $ git push hasura master
 
 {JAVA CODE SNIPPET Jaison TODO}
 
-3. Now you can push data from your server to the application with a simple function call. Simply call the function `utils.sendPushNotifcation` with the 'user_id'.
+4. Now you can push data from your server to the application with a simple function call. Simply call the function `utils.sendPushNotifcation` with the 'user_id'. It returns true if the push was successful.
+
+```javascript
+const success = sendPushNotifcation(id);
+```
+
+### iOS
+
+Jaison TODO
+
+## Socket.io
+
+
+Socket.IO enables real-time bidirectional event-based communication. It works on every platform, browser or device, focusing equally on reliability and speed.
+
+### Android client
+
+The mobile server in this project already has socket.io implemented. You simply have to connect to `https://api.<CLUSTER_NAME>.hasura-app.io` using the socket.io client to open a connection.
+
+```java
+socket = IO.socket("https://api.<CLUSTER_NAME>.hasura-app.io");
+socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+  @Override
+  public void call(Object... args) {
+    socket.emit("message", "hi");
+    socket.disconnect();
+  }
+
+}).on("message", new Emitter.Listener() {
+
+  @Override
+  public void call(Object... args) {}
+
+}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+  @Override
+  public void call(Object... args) {}
+
+});
+socket.connect();
+```
+
+### iOS client
+
+swift code snipped Jaison TODO
+
+
+## Modifying server code
+
+The source code for the server lives in `microservices/api/server.js`. Modify it as desired and deploy the changes by running a git push again.
 
 ```
-const fcmAPIKey = 
+$ git add .
+$ git commit -m "Modified server code"
+$ git push hasura master
 ```
 
-4.
+## Support
+
+If you find any bugs, please feel free to raise an issue [here](https://github.com/hasura/mobile-backend-nodejs).
