@@ -39,6 +39,11 @@ defaultProviders:
     enabled: "false"
     defaultRoles: []
 
+
+uiKit:
+  theme: "dark"
+  redirectUrl: "https://www.google.com"
+        
 # Session related configuration
 session:
   # Name of the cookie. This is usually set to your cluster's domain. No need
