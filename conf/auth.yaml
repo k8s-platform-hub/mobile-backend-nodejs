@@ -41,6 +41,7 @@ defaultProviders:
 
 
 uiKit:
+  enabled: "false"
   theme: "dark"
   redirectUrl: "https://www.google.com"
         
