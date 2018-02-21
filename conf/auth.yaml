@@ -41,8 +41,8 @@ defaultProviders:
 
 
 uiKit:
-  enabled: "false"
-  theme: "dark"
+  enabled: "true"
+  theme: "light"
   redirectUrl: "https://www.google.com"
         
 # Session related configuration
