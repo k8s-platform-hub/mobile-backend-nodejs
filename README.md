@@ -1,3 +1,69 @@
+## Introduction
+
+This is a tutorial aimed at mobile application developers, namely Android, iOS and React Native developers who want to build their own backends for their front end apps. By the end of this tutorial you will be able to build mobile applications with the following backend features:
+- Authentication (Auth)
+- Storing and retrieving data from a Database in the cloud (Data)
+- Upload and download files to and from the cloud (Filestore)
+- Create a server in nodejs (Custom Microservice):
+  - To implement custom business logic
+  - To handle Push notificaions
+  - To handle realtime data using websockets
+
+## Pre-requisites
+
+- Basic knowledge of either Android, iOS or React Native application development. 
+- A basic knowledge of Javascript or atleast the readiness to pick it up.
+- `git` installed on your local machine and also a basic knowledge of using `git`
+
+## Getting started
+
+Before you begin, ensure that you have the **Hasura CLI** installed on your local machine. If not, you can find the instructions to install it [here](https://docs.hasura.io/0.15/manual/install-hasura-cli.html). Once you have the CLI tool installed, login or signup into Hasura by running the following command on your terminal:
+
+```bash
+$ hasura login
+```
+
+There are two steps required to get started with a project on Hasura.
+
+**Step 1**: Get a Hasura project and a Hasura cluster
+
+>**What is a Hasura Project ?**
+
+>A hasura project is a folder on your filesystem that contains all the source code and configuration for your application. A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub. Every project you see on hasura.io/hub is a `Hasura Project` with particular services or data added to it based on the type of project it is.
+
+
+We are going to clone the `mobile-backend-nodejs` project which consists of:
+- Boilerplate code for a nodejs server to handle push notifications and a websocket connection
+- A basic Android, iOS and React Native application with working code implementing the varioud backend features covered in this tutorial
+
+To get the project,
+
+```bash
+$ hasura quickstart hasura/mobile-backend-nodejs
+```
+
+The above command does the following:
+- Creates a new directory in your current directory called `mobile-backend-nodejs` and clones the content of the `mobile-backend-nodejs` project from Hasura Hub into it.
+- Makes this new directory a `git` repository and adds a remote called `hasura` to it.
+- It also creates a free `Hasura Cluster` for you.  
+
+### What is a Hasura cluster ?
+
+A Hasura cluster is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: awesome45.hasura-app.io.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Description
 
 Mobile backend project written in NodeJS using Express. Deploy to cloud using a simple git push.
