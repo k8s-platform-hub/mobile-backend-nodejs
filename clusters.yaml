@@ -1,7 +1,7 @@
 - alias: hasura
   config:
     configmap: controller-conf
-    namespace: hasura
+    namespace: implode62-hasura
   data: null
-  kubeContext: afterbirth27
-  name: afterbirth27
+  kubeContext: implode62
+  name: implode62
