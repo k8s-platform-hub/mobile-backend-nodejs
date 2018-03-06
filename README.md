@@ -34,7 +34,7 @@ There are two steps required to get started with a project on Hasura.
 
 We are going to clone the `mobile-backend-nodejs` project which consists of:
 - Boilerplate code for a nodejs server to handle push notifications and a websocket connection
-- A basic Android, iOS and React Native application with working code implementing the varioud backend features covered in this tutorial
+- A basic Android, iOS and React Native application with working code implementing the various backend features covered in this tutorial
 
 To get the project,
 
@@ -45,11 +45,101 @@ $ hasura quickstart hasura/mobile-backend-nodejs
 The above command does the following:
 - Creates a new directory in your current directory called `mobile-backend-nodejs` and clones the content of the `mobile-backend-nodejs` project from Hasura Hub into it.
 - Makes this new directory a `git` repository and adds a remote called `hasura` to it.
-- It also creates a free `Hasura Cluster` for you.  
+- It also creates a free `Hasura Cluster` for you and `adds` this cluster to the cloned hasura project.
 
-### What is a Hasura cluster ?
+>**What is a Hasura cluster ?**
 
-A Hasura cluster is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: awesome45.hasura-app.io.
+>A Hasura cluster is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`.
+
+**Step 2**: Deploy the project to your cluster
+
+```bash
+$ # cd into the project directory
+$ cd mobile-backend-nodejs
+$ # Make your initial commit
+$ git add . && git commit -m "Initial Commit"
+$ # Push to the hasura remote
+$ git push hasura master
+```
+
+## The API Console
+
+Every Hasura cluster comes with an `API Console` that you can use to explore the various backend features provided by Hasura. To access the API console, 
+
+```bash
+$ # Run the following inside the project directory
+$ hasura api-console
+```
+
+This will open up the console on your browser. You can access it at http://localhost:9695. We will be using the `API Console` extensively during this tutorial.
+
+## Authentication
+
+Every modern app almost always requires some form of authentication. This is useful to identify a user and provide some sort of personalized experience to the user. Hasura provides various types of authentication methods (username/password, mobile/otp, email/password, Google, Facebook etc).
+
+In this tutorial, we are going to take a look at a simple username/password based authentication. Start by opening up the `API Console`. Ensure that you are on the `API Explorer` tab. 
+
+### Signup
+
+Let's first take a look at the signup endpoint. From the panel on the left, click on `SignUp` under `Username/Password`. Next, fill up your required username and password.
+
+#### TODO - CHANGE IMAGES
+![API Console](https://docs.hasura.io/0.15/_images/console-screenshot.png)
+
+Once you have decided on your username and password, hit on the `Send` button to Sign Up. Your response would be similar to the following:
+
+```json
+{
+    "auth_token": "9cea876c07de13d8336c4a6d80fa9f64648506bc20974fd2",
+    "username": "johnsmith",
+    "hasura_id": 2,
+    "hasura_roles": [
+        "user"
+    ]
+}
+```
+
+**auth_token** is the authorization token for this particular user, which we will use later to access authorized information. You should save this offline in your app to avoid making your user login each time. 
+**hasura_id** is the id of the user that is automatically assigned by Hasura on signing up.
+**hasura_roles** are the roles associated with this user. Head [here](https://docs.hasura.io/0.15/manual/roles/index.html) to get a better understanding on what roles are and how they are useful.
+
+### Login
+
+Now that we have created a user using the signup endpoint, we can now login with the same credentials. Click on `Login` under `Username/Password`. Enter in the same username and password that you used to sign up above and click on `Send`.
+
+#### TODO: IMAGE
+
+In the response that you get, you will see that the `hasura_id` key has the same value as the one you got after you signed up.
+
+### Code Generator
+
+Next, let's take a look at how this will look in your respective client side code. Click on the `Code Generator` button on thr top right.
+
+#### TODO: IMAGE
+
+Select your required language and library from the drop down on the left.
+- For React Native select `Javascript React Native`
+- For iOS select `Swift iOS Alamofire`
+- For Android select `Java Android`
+
+#### TODO: IMAGE
+
+You can now copy and paste this into your client. 
+#### TODO: ADD CODE REFERENCE
+
+#### TODO: add links to docs
+> For advanced use cases and to explore other providers, check out [docs]().
+
+
+
+
+
+
+
+
+
+
+
 
 
 
