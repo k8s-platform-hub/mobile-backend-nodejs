@@ -1,5 +1,7 @@
 const request = require('request');
-const fcmKey = process.env.FCM_KEY;
+
+// Get the Web API Key from your Firebase Project Settings on the Firebase Cloud Console and add it here
+const fcmKey = ''; 
 
 const dbAdminHeaders = {
   'Content-Type': 'application/json',
@@ -53,7 +55,6 @@ const sendPushNotification = (id, payload) => {
     return false
   });
 }
-
 
 const getFcmToken = (id) => {
   let dataUrl = 'http://data.hasura/v1/query';

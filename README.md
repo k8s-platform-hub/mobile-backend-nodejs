@@ -79,7 +79,7 @@ In this tutorial, we are going to take a look at a simple username/password base
 
 Let's first take a look at the signup endpoint. From the panel on the left, click on `SignUp` under `Username/Password`. Next, fill up your required username and password.
 
-![Auth SignUp](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/readme-update/readme-assets/auth-signup)
+![Auth SignUp](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/jaisontj-readme/readme-assets/auth-signup.png)
 
 We are going with the username "jacksniper" and password "jack@sniper". You can choose any username and password combination. Once you have decided on your username and password, hit on the `Send` button to Sign Up. Your response would look like:
 
@@ -308,211 +308,120 @@ Similar to Authentication, you are encouraged to use the `Code Generator` to gen
 
 ![Data CodeGen Relation](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/readme-update/readme-assets/data-codegen-rel)
 
+#### TODO: ADD CODE REFERENCE
+
+> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+
+
 ## Image Upload and Download
 
 Some apps require the ability to upload and download files. Hasura provides easy to use APIs to upload and download files as well. Under the `API Explorer` tab, explore the APIs under `File`
 
-#### TODO IMAGE
+You can test out the filestore APIs on the `API Explorer` and use the `Code Generator` to include it in your client side code.
 
-#### TODO Code reference
+![Filestore](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/readme-update/readme-assets/filestore-explore)
 
+#### TODO: ADD CODE REFERENCE
 
+> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
 
+## Writing your own custom microservice
 
+Although, Hasura provides backend components, there are times when you might want to write your own custom logic and for this write your own server. Common use cases of this include, sending push notifications to the users mobile device when a certain event happens, doing some sort of calculation or data manipulation for some event.
 
+For this, you would want to create a custom microservice on Hasura. This project comes with one such microservice which runs on the `api` subdomain. This microservice is a simple Nodejs Express server which includes boilerplate code for the following:
+- Writing custom endpoints
+- Push notifications
+- Websockets
 
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Description
-
-Mobile backend project written in NodeJS using Express. Deploy to cloud using a simple git push.
-
-This is an ideal project to start with if:
-
-- If you are a front-end mobile developer familiar with building UI
-- If you are looking to easily deploy nodeJS server to cloud
-- If you are looking to implement push notifications or socket.io with nodeJS.
-
-Also a tutorial for mobile developers who are planning to go fullstack.
-
-## Deployment guide
-
-1. Quickstart this project. Run this command.
+You can open the url to this microservice on your web browser by running the following in your terminal
 
 ```bash
-$ hasura quickstart mobile-backend-nodejs
+$ hasura microservice open api
 ```
 
-2. Simply git push to the hasura remote from the project directory to deploy the mobile server.
+>Every Hasura cluster comes with a few default microservices, all the backend feature we have used until now is a **Microservice**. Authentication is provided by the `auth` microservice, the data APIS by the `data` microservice, file upload and download by the `filestore` microservice. To take a look at the available microservices, run `$ hasura microservice list` on your terminal, inside the project directory. Hence, it is only natural that if you want additional features, you would simply create a new microservice. All custom microservices can be found inside the `microservices` directory.
 
+The code for this microservice can be found inside the `microservices/api/src`
+
+### Custom Endpoints
+
+Navigate to `microservices/api/src/custom-logic/routes.js` to see how to define a custom route. There are two examples in it, one is a definition for a `GET` request at `"/"` and the other for a `POST` request at `"/echo"`. The `"/"` route just returns a "Hello World" and the `"/echo"` endpoint just returns whatever you send to it.
+
+You can try these out in the `API Explorer`.
+
+#### TODO IMAGE
+
+#### TODO IMAGE
+
+### Push Notifications
+
+FirebaseCloudMessaging(FCM) and ApplePushNotificationsService(APNS) are used to send push notifications to Android and iOS devices respectively. FCM, also has support for APNS, which means that they have a wrapper over the APNS APIs. This project makes use of FCM for its push notification needs. Follow the instructions given in their docs to integrate Firebase into your Android and(or) iOS app.
+
+FCM has APIs that you need to hit to send push notifications to devices. Each device is identified by a unique token by fcm, hence, you need to ensure that you save the token for each device and associate it with a user's `hasura_id`. There are multiple ways to handle this:
+- Add a new column to the `user_details` table, called `fcm_token` and store the token for each user there.
+- Create a new table, for eg: `user_fcm_token` with columns `user_id` and `fcm_token`.
+
+Basically, in the callback method of Firebase where you receive the fcm token, you should make a data api to store the fcm_token and associate that with the user. You can either write a custom endpoint to do this or make the data api directly in your client code. 
+
+>The `api` microservice includes an example of writing a custom endpoint for doing this at `microservices/api/src/push-notif/routes` defined as the `"/register_device"` route. 
+
+For Android, that would be 
+
+```java
+# Android code
 ```
-$ git add .
-$ git commit -m "First deployment"
-$ git push hasura master
+
+For iOS, 
+
+```swift
+# iOS Code
 ```
 
-3. The server will be deployed to `https://api.<CLUSTER-NAME>.hasura-app.io/`. Run `hasura cluster status` to find your cluster name.
+Now, whenever you want to send a push notification to a user, you will fetch the associated fcm_token from the user's `user_id` and then hit the fcm api to send the push notfication. 
 
-## API-Console
+>There is an example of doing this in the `api` microservice, you can find the code for it at `microservices/api/src/push-notif/routes` defined as the `"/test_push"`.
 
-Hasura provides you with a web UI to manage your backend. Just run the following command from your backend.
+**Note:** You need to set the Web API Key from your Firebase Project Settings on the Firebase Cloud Console and add it to the `fcmKey` variable at `microservices/api/src/push-notif/routes`.
 
+
+#### Storing the FCM key in the server the right way
+
+Ideally, you should pass the FCM key as an environment variable to the server and not hard code it in the source code. To do this, you need to add the key as a secret into Hasura and then edit the `k8s.yaml` file inside `microservices/api/` to pass that as an environment variable. 
+
+**Step 1**: Add FCM key to Hasura secrets 
+
+```bash
+$ # Replace <WEB API KEY> with the FCM Key
+$ $ hasura secret update fcm.key "<WEB API KEY>"
 ```
-$ hasura api-console
-```
 
-![api-explorer.png](https://filestore.hasura.io/v1/file/463f07f7-299d-455e-a6f8-ff2599ca8402)
+**Step 2**: Edit `k8s.yaml` file
 
-
-## Using the database
-
-1. Creating a table: Go to `Data` tab in the menu bar and click on create table as shown below
-  ~[Image TODO]
-
-2. Once you have created the table, go to the `API-Explorer` tab and try building a query with the query builder. Also add the admin token because you haven't added anonymous permissions on the table.
-  ~[Image TODO]
-
-3. Since you have not added any permissions for the table, you need to add admin token Hit `send`.
-
-4. You have successfully made a data query without the hassle of configuring a database.
-
-5. Now if you want to make this same query in your code, there is a code generator that builds code snippets of the exact same query in your preferred language. Click on `Generate API Code`
-  ~[Image TODO]
-
-6. Try playing around with the query builder. You can build a lot of complex queries. You can also add different permissions from `Modify Table`.
-
-## Using Authentication
-
-1. Go back to the API explorer. Click on `Username-Password > Signup` under `Auth` on the left panel.
-
-2. Modify the username and password in the request body and hit send.
-  ~[Image TODO]
-
-3. You just created a user.
-
-4. Now click on `Username-Password > Login`. Try logging in with the same username and password.
-
-5. You will get success JSON body in response. You can use the auth token from this body to authenticate your users to the data requests. (Just like we added the admin token to authenticate the data query that we built in the data section)
-
-6. Click on generate API code in the query builder to build the same query in your preferred language.
-
-7. In your mobile application, you might want to store this token locally so that your users' session is persisted and they do not have to login everytime they open the app.
-
-## Push Notifications
-
-A push notification is a message that is pushed from the server to a mobile device. App managers can send messages to clients whenever they want. Push notifications are also used for having realtime support in your application.
-
-### Android
-
-We will show how to use push notifications to apps in Android.
-
-1. Create a project on Firebase, add the android application to the project, add the firebase service to the android application and obtain the firebase API key. ([Follow the docs](https://firebase.google.com/docs/cloud-messaging/) you haven't done this before)
-
-2. To add the firebase API key to environment variables, run the following commands from the project directory.
+Run the following from the root directory of the project.
 
 ```bash
 $ cp microservices/api/k8s.fcm.yaml microservices/api/k8s.yaml
-$ hasura secret update fcm.key "<YOUR_FIREBASE_API_KEY>"
-$ git add . && git commit -m "Mentionied the FIREBASE_KEY in k8s.yaml"
-$ git push hasura master
 ```
 
-3. Now whenever you sign up a user in your application, you should store their device's firebase token to database to associate it with their user id. Just send the following with payload with the following headers to the following endpoint.
-
-{JAVA CODE SNIPPET Jaison TODO}
-
-4. Now you can push data from your server to the application with a simple function call. Simply call the function `utils.sendPushNotifcation` with the 'user_id'. It returns true if the push was successful.
-
-```javascript
-const success = sendPushNotifcation(id);
-```
-
-### iOS
-
-Jaison TODO
-
-## Socket.io
+#### TODO: DOC REFERENCE
+> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
 
 
-Socket.IO enables real-time bidirectional event-based communication. It works on every platform, browser or device, focusing equally on reliability and speed.
+### Websockets
 
-### Android client
+WebSockets are a technology that makes it possible to open an interactive communication session between a client app and a server. With this API, you can send messages to a server and receive event-driven responses without having to poll the server for a reply.
 
-The mobile server in this project already has socket.io implemented. You simply have to connect to `https://api.<CLUSTER_NAME>.hasura-app.io` using the socket.io client to open a connection.
+Chat apps are the most common use cases for Websockets. We are going to use [Socket.io](https://socket.io/), which is basically a Javascript framework implementing the Websockets protocol.
 
-```java
-socket = IO.socket("https://api.<CLUSTER_NAME>.hasura-app.io");
-socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+`microservices/api/src/server.js` has a simple setup done using `socket.io`. 
 
-  @Override
-  public void call(Object... args) {
-    socket.emit("message", "hi");
-    socket.disconnect();
-  }
-
-}).on("message", new Emitter.Listener() {
-
-  @Override
-  public void call(Object... args) {}
-
-}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-  @Override
-  public void call(Object... args) {}
-
-});
-socket.connect();
-```
-
-### iOS client
-
-swift code snipped Jaison TODO
+#### TODO: DOC REFERENCE
+> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+For more information on using socket.io, it is recommended to check their [docs](https://socket.io/docs/).
 
 
-## Modifying server code
 
-The source code for the server lives in `microservices/api/server.js`. Modify it as desired and deploy the changes by running a git push again.
 
-```
-$ git add .
-$ git commit -m "Modified server code"
-$ git push hasura master
-```
 
-## Support
 
-If you find any bugs, please feel free to raise an issue [here](https://github.com/hasura/mobile-backend-nodejs).
