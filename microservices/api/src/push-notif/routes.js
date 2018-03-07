@@ -1,20 +1,14 @@
-const utils = require('../utils/utils');
+const utils = require('./utils');
 const express = require("express");
 const router = express.Router();
 const request = require('request');
-
-router.get("/", (req, resp) => {
-  resp.send("Hello!! The server is running.");
-});
 
 router.post('/register_device', (req, resp) => {
   const identity = utils.getRequestIdentity(req.headers);
 
   if (identity.role === 'anonymous' ) {
     resp.status(401).send({ error: 'unauthorized'});
-  }
-
-  else if(!req.body || (req.body && !req.body.token)){
+  } else if(!req.body || (req.body && !req.body.token)){
     resp.status(400).send({
       'error': 'invalid payload'
     });
@@ -75,7 +69,12 @@ router.post('/test_push', (req, resp) => {
     return;
   }
 
-  const dataPayload = req.body.payload ? req.body.payload : {'title': 'NotifTitle', 'body': 'NotifBody'};
+  const dataPayload = req.body.payload;
+  
+  if (!dataPayload) {
+    resp.status(400).send({error: 'No payload present in request'});
+    return;
+  }
 
   if (utils.sendPushNotification(req.body.id, dataPayload) == false){
     resp.status(500).send({

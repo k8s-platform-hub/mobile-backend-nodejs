@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-const serverRoutes = require("./routes/routes");
+const serverRoutes = require("./custom-logic/routes");
 
 const socketClient = require("socket.io");
 const io = socketClient(server);
@@ -18,17 +18,14 @@ const io = socketClient(server);
 app.use(serverRoutes);
 
 app.use(function(req, res, next) {
-
   res.header("Access-Control-Allow-Origin", req.get("origin"));
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
 io.on("connection", socket => {
-  console.log("New client connected")
   socket.emit('connected', 'Welcome to the socket server');
   socket.on("message", (msg) => {
-    console.log('Received message: ' + msg);
     socket.emit('message', ('The message you sent is: ' + msg));
   })
   socket.on("disconnect", () => console.log("Client disconnected"));
