@@ -13,6 +13,7 @@ This is a tutorial aimed at mobile application developers, namely Android, iOS a
 
 - Basic knowledge of either Android, iOS or React Native application development. 
 - A basic knowledge of Javascript or atleast the readiness to pick it up.
+- A basic understanding of relational databases.
 - `git` installed on your local machine and also a basic knowledge of using `git`
 
 ## Getting started
@@ -27,10 +28,7 @@ There are two steps required to get started with a project on Hasura.
 
 **Step 1**: Get a Hasura project and a Hasura cluster
 
->**What is a Hasura Project ?**
-
->A hasura project is a folder on your filesystem that contains all the source code and configuration for your application. A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub. Every project you see on hasura.io/hub is a `Hasura Project` with particular services or data added to it based on the type of project it is.
-
+>A **hasura project** is a folder on your filesystem that contains all the source code and configuration for your application. A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub. Every project you see on hasura.io/hub is a `Hasura Project` with particular services or data added to it based on the type of project it is.
 
 We are going to clone the `mobile-backend-nodejs` project which consists of:
 - Boilerplate code for a nodejs server to handle push notifications and a websocket connection
@@ -47,9 +45,7 @@ The above command does the following:
 - Makes this new directory a `git` repository and adds a remote called `hasura` to it.
 - It also creates a free `Hasura Cluster` for you and `adds` this cluster to the cloned hasura project.
 
->**What is a Hasura cluster ?**
-
->A Hasura cluster is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`.
+>A **Hasura cluster** is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`.
 
 **Step 2**: Deploy the project to your cluster
 
@@ -101,7 +97,8 @@ Once you have decided on your username and password, hit on the `Send` button to
 
 **auth_token** is the authorization token for this particular user, which we will use later to access authorized information. You should save this offline in your app to avoid making your user login each time. 
 **hasura_id** is the id of the user that is automatically assigned by Hasura on signing up.
-**hasura_roles** are the roles associated with this user. Head [here](https://docs.hasura.io/0.15/manual/roles/index.html) to get a better understanding on what roles are and how they are useful.
+**hasura_roles** are the roles associated with this user. Keep in mind that the role associated with this user is `user`. This is default behaviour. We will get to where this comes into play in a bit. You can read more about roles [here](https://docs.hasura.io/0.15/manual/roles/index.html)
+
 
 ### Login
 
@@ -111,9 +108,27 @@ Now that we have created a user using the signup endpoint, we can now login with
 
 In the response that you get, you will see that the `hasura_id` key has the same value as the one you got after you signed up.
 
+### Authenticated user requests
+
+To perform any authenticated request, you need the user's authentication token (auth_token from the login/signup endpoint) and pass that as a header. In the `API Explorer` of the `API Console`, click on `User Information` under `Logged in User Actions` and hit the `Send` button. 
+
+You will get the following error response
+
+```json
+{
+    "code": "unauthorized",
+    "message": "you have to be a logged in user",
+    "detail": null
+}
+```
+
+This is because we have not passed the auth_token in the header. Add a new header to the request with key `Authorization` and value `Bearer <auth_token>` (replace `<auth_token>` with the auth_token that you received from your login/signup request. If you did not save it, perform a login request with the same username and password to get an auth_token)
+
+Hit the `Send` button after adding the `Authorization` header. You will receive a response similar to the one you received after login/signup.
+
 ### Code Generator
 
-Next, let's take a look at how this will look in your respective client side code. Click on the `Code Generator` button on thr top right.
+Next, let's take a look at how this will look in your respective client side code. Click on the `Code Generator` button on the top right.
 
 #### TODO: IMAGE
 
@@ -128,7 +143,165 @@ You can now copy and paste this into your client.
 #### TODO: ADD CODE REFERENCE
 
 #### TODO: add links to docs
-> For advanced use cases and to explore other providers, check out [docs]().
+> For advanced use cases and to explore other providers, check out [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+
+## Database
+
+Most apps require a database to store and retrieve information from. This can be user specific information or contextual data in general which you do not want to store locally in your app or you want to share this data with all the users of your app. Ideally, you would want to store this in a database on the cloud and access or modify it based on certain events on your app. 
+
+Let's explore how we can do this on Hasura. Head back to the `API Console` and ensure that you are on the `Data` tab. 
+
+### Creating a table
+
+Click on the `Create Table` button. Let's start off with a table called `user_details` which we will use to store extra information about a user, like their name, age and gender. We will also be adding an additional column `user_id` to store the `hasura_id` of the user. `user_id` will also be our primary key as the `hasura_id` for every user is always unique.
+
+#### TODO IMAGE
+
+Click the `Create` button to create the table.
+
+### Table Permissions & User Roles
+
+Every table created on Hasura can only be accessed by users with an `admin` role. Ergo, the user we created earlier will not be able to access the `user_details` table (since the role associated with that user was `user`). This is done to ensure security on all tables, so that nobody can randomly access data from your database unless you specifically allow that.
+
+In our case, `user_details` table is used to store user specific data. We want to give every user permission to insert and select their own data from the `user_details` table. Moreover, as an extra security measure, they should not be able to fetch another users data either.
+
+Under the `Data` tab of the `API Console`, select `user_details` from the left panel and then click on the `Permissions` tab on the right to set permissions for the table. As you can see, an `admin` role has complete permission over the table. No other role has any permission. 
+
+**First**, lets give the `user` role permission to insert data into the table as long as the `user_id` being inserted is the same as a the `hasura_id` of the user trying to insert this data. To do this, click on insert next to user row, check the `with custom check` option, choose `user_id` from the drop down and then select `$eq` and finally click on `X-Hasura-User-Id`
+
+#### TODO: IMAGE
+
+**Second**, lets give the `user` role permission to get their data from the table. Click on select next to the user row, check the `with same checks as insert`, also click on the `Toggle All` button next to `With Access to columns`. This basically means that a particular user can only get their own data from the table.
+
+#### TODO: IMAGE
+
+Do the same for Update and Delete permissions as well.
+
+#### TODO IMAGE
+
+### Inserting data into the table
+
+Head to the `API Explorer` and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `insert` to insert into a table. 
+
+#### TODO IMAGE
+
+Next, click on `table` and select `user_details` from the list. Fill in the `objects` array with data you want inserted into the table. In the picture shown below, we are adding data for the user we signed up with.
+
+#### TODO IMAGE
+
+Since we have given `user` role permission to the `user_details` table, we have to add the Authorization header to the insert query. (Add key `Authorization` and value `Bearer <auth_token>` to the header)
+
+#### TODO IMAGE
+
+> If you try to insert into the `user_details` table with a `user_id` which is not the same as the `hasura_id` as the user making the request, it will fail. This is because of the permissions we set on the `user_details` table.
+
+### Selecting data from the table
+
+Head to the `API Explorer` and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `select` to select from a table. 
+
+#### TODO IMAGE
+
+Next, click on `table` and select `user_details` from the list. Select `user_id`, `name` and `gender` for the columns.
+
+#### TODO IMAGE
+
+Since we have given `user` role permission to the `user_details` table, we have to add the Authorization header to the select query (Add key `Authorization` and value `Bearer <auth_token>` to the header). Hit the `Send` button to make this request.
+
+#### TODO IMAGE
+
+### Relationships and Foreign Keys
+
+One of the advantages of using a RDBMS is that you can create connections between various tables through foreign key constraints. These can be used to build more complex relationships, which can be used to fetch related data alongside the columns queried, as pseudo columns.
+
+To explore this feature, let's create a new table called `user_education` to store information about each user's educational background like `institution_name` and `degree`. We will also have an additional column `id` of type `Integer (auto increment)` and a `user_id` column to store the `hasura_id` of the user. `id` will be the primary key for this table.
+
+> It is not a good idea to set `user_id` as the primary key as a user can have multiple addresses and setting `user_id` as the primary key will not let us enter more than address for a particular user.
+
+#### TODO IMAGE
+
+Click on the create button.
+
+Now, let's add a foreign key constraint from the `user_id` column to the `user_id` column of the `user_details` table. To do this, under the `Modify` tab, click on `edit` next to `user_id`, choose `user_details` as the reference table and `user_id` as the reference column. Click on `Save` to add this foreign key constraint.
+
+Next, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`. 
+
+#### TODO IMAGE
+
+Similarly, add `user` permissions for insert and select on the `user_education` table.
+
+#### TODO IMAGE
+
+Click on `Browse Rows` and you will now see another column called `education` for the `user_details` table.
+
+#### TODO IMAGE
+
+Head to the `API Explorer` and add some data into the `user_education` table for our user.
+
+#### TODO IMAGE
+
+#### Fetching relationship data 
+
+We can now fetch the education details for each user from the `user_details` table like so:
+
+#### TODO IMAGE
+
+Your response will look like the following:
+
+```json
+[
+    {
+        "user_id": 2,
+        "name": "Jack Smith",
+        "gender": "Male",
+        "education": [
+            {
+                "institution_name": "XYZ University",
+                "degree": "BE",
+                "id": 1,
+                "user_id": 2
+            },
+            {
+                "institution_name": "ABC University",
+                "degree": "MS",
+                "id": 2,
+                "user_id": 2
+            }
+        ]
+    }
+]
+```
+
+### Code Generator
+
+Similar to Authentication, you are encouraged to use the `Code Generator` to generate the client side code to make these requests.
+
+#### TODO IMAGE
+
+
+## Image Upload and Download
+
+Some apps require the ability to upload and download files. Hasura provides easy to use APIs to upload and download files as well. Under the `API Explorer` tab, explore the APIs under `File`
+
+#### TODO IMAGE
+
+#### TODO Code reference
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
 
 
 
