@@ -103,7 +103,7 @@ We are going with the username "jacksniper" and password "jack@sniper". You can 
 
 Now that we have created a user using the signup endpoint, we can login with the same credentials. Click on `Login` under `Username/Password`. Enter in the same username and password that you used to sign up above and click on `Send`.
 
-![Auth Login](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-login)
+![Auth Login](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-login.png)
 
 In the response that you get, you will see that the `hasura_id` key has the same value as the one you got after you signed up. In this case, that value is 2.
 
@@ -111,7 +111,7 @@ In the response that you get, you will see that the `hasura_id` key has the same
 
 To perform any authenticated request, you need the user's authentication token (auth_token from the login/signup endpoint) and pass that as a header. In the `API Explorer` of the `API Console`, click on `User Information` under `Logged in User Actions` and hit the `Send` button.
 
-![Auth UserInfo Fail](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-info-fail)
+![Auth UserInfo Fail](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-info-fail.png)
 
 We get the following response:
 
@@ -127,20 +127,20 @@ This is because we have not passed the auth_token in the header. Add a new heade
 
 Hit the `Send` button after adding the `Authorization` header. You will receive a response similar to the one you received after login/signup.
 
-![Auth UserInfo](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-info)
+![Auth UserInfo](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-info.png)
 
 ### Code Generator
 
 A nifty feature of the `API Console` is the `Code Generator`. For every request that you want to try out on the `API Console`, you can generate the client side code for it.As an example, let's generate the code to make a `login` request. Click on the login endpoint and then click on the `Generate API Code` button the top right corner.
 
-![Auth CodeGen Button](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-codegen-button)
+![Auth CodeGen Button](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-codegen-button.png)
 
 Select your required language and library from the drop down on the left.
 - For React Native select `Javascript React Native`
 - For iOS select `Swift iOS Alamofire`
 - For Android select `Java Android`
 
-![Auth CodeGen](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-codegen)
+![Auth CodeGen](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-codegen.png)
 
 You can now copy and paste this into your client.
 
@@ -154,13 +154,13 @@ Most apps require a database to store and retrieve information from. This can be
 
 Let's explore how we can do this on Hasura. Head back to the `API Console` and ensure that you are on the `Data` tab. 
 
-![Data Tab](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-tab)
+![Data Tab](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-tab.png)
 
 ### Creating a table
 
 Click on the `Create Table` button. Let's start off with a table called `user_details` which we will use to store extra information about a user, like their name and gender. We will also be adding an additional column `user_id` to store the `hasura_id` of the user. `user_id` will also be our primary key as the `hasura_id` for every user is always unique.
 
-![Data CreateTable](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-createtable)
+![Data CreateTable](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-createtable.png)
 
 Click the `Create` button to create the table.
 
@@ -172,23 +172,23 @@ In our case, `user_details` table is used to store user specific data. We want t
 
 Under the `Data` tab of the `API Console`, select `user_details` from the left panel and then click on the `Permissions` tab on the right to set permissions for the table. As you can see, an `admin` role has complete permission over the table. No other role has any permission. 
 
-![Data Permissions](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions)
+![Data Permissions](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions.png)
 
 **First**, lets give the `user` role permission to insert data into the table. To do this, click on insert next to user row, check the `with custom check` option, choose `user_id` from the drop down and then select `$eq` and finally click on `X-Hasura-User-Id`. Click on `Save Permissions`.
 
-![Data Permissions Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-insert)
+![Data Permissions Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-insert.png)
 
 The permissions set above translates to: *Allow a user to insert into the `user_details` table only if the `user_id` being inserted is the same as the `hasura_id` associated with the user's `auth_token` which is passed as the Authorization token in the header* 
 
 **Second**, lets give the `user` role permission to get their data from the table. Click on select next to the user row, check the `with same checks as insert`, also click on the `Toggle All` button next to `With Access to columns`. Click on `Save Permissions`.
 
-![Data Permissions Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-select)
+![Data Permissions Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-select.png)
 
 The permissions set above translates to: *Let the user only read rows from the `user_details` table where the `user_id` is equal to the `hasura_id` of the user which is passed as the Authorization token in the header. Moreover, allow the user to only read the selected columns, in this case, user_id, name and gender* 
 
 **Third**, update permissions
 
-![Data Permissions Update](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-update)
+![Data Permissions Update](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-update.png)
 
 Translation: *Let the user only update rows from the `user_details` table where the `user_id` is equal to the `hasura_id` of the user which is passed as the Authorization token in the header. Moreover, allow the user to only update the selected columns, in this case, the user cannot modify the `user_id`*
 
@@ -196,7 +196,7 @@ Click on `Save Permissions`.
 
 **Finally**, delete permissions
 
-![Data Permissions Delete](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-delete)
+![Data Permissions Delete](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-delete.png)
 
 Translation: *Let the user only delete rows from the `user_details` table where the `user_id` is equal to the `hasura_id` of the user which is passed as the Authorization token in the header.*
 
@@ -208,15 +208,15 @@ Now that we have created our table and also given it permissions, let's see how 
 
 Head to the `API Explorer` tab and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `insert` to insert into a table. 
 
-![Data QB Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert)
+![Data QB Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert.png
 
 Next, click on `table` and select `user_details` from the list. Fill in the `objects` array with data you want inserted into the table. In the picture shown below, we are adding data for the user we signed up with (`hasura_id`: 2)
 
-![Data QB Insert2](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert2)
+![Data QB Insert2](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert2.png)
 
 Since we have given `user` role permission to the `user_details` table, we have to add the Authorization header to the insert query. (Add key `Authorization` and value `Bearer <auth_token>` to the header. If you do not have the )
 
-![Data QB Insert AuthHeader](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert-authheader)
+![Data QB Insert AuthHeader](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert-authheader.png)
 
 > If you try to insert into the `user_details` table with a `user_id` which is not the same as the `hasura_id` as the user making the request, it will fail. This is because of the permissions we set on the `user_details` table.
 
@@ -224,11 +224,11 @@ Since we have given `user` role permission to the `user_details` table, we have 
 
 Head to the `API Explorer` and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `select` to select from a table. Next, click on `table` and select `user_details` from the list. Select `user_id`, `name` and `gender` for the columns.
 
-![Data QB Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select)
+![Data QB Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select.png)
 
 Since we have given `user` role permission to the `user_details` table, we have to add the Authorization header to the select query (Add key `Authorization` and value `Bearer <auth_token>` to the header). Hit the `Send` button to make this request.
 
-![Data QB Select AuthHeader](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select-authheader)
+![Data QB Select AuthHeader](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select-authheader.png)
 
 ### Relationships and Foreign Keys
 
@@ -238,43 +238,43 @@ To explore this feature, let's create a new table called `user_education` to sto
 
 > It is not a good idea to set `user_id` as the primary key as a user can have multiple addresses and setting `user_id` as the primary key will not let us enter more than address for a particular user.
 
-![Data CreateTable Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-createtable-edu)
+![Data CreateTable Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-createtable-edu.png)
 
 Click on the `Create` button.
 
 Similar to `user_details` table, add `user` permissions on the `user_education` table.
 
-![Data Permissions Edu Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-insert)
+![Data Permissions Edu Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-insert.png)
 
-![Data Permissions Edu Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-select)
+![Data Permissions Edu Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-select.png)
 
-![Data Permissions Edu Update](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-update)
+![Data Permissions Edu Update](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-update.png)
 
-![Data Permissions Edu Delete](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-delete)
+![Data Permissions Edu Delete](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-delete.png)
 
 What we want to achieve now is that when we fetch user details from the `user_details` table, we should also get the respective education data for the user. For this, we are going to create an array relationship from the `user_details` table to the `user_education` table.
 
 Now, let's add a foreign key constraint from the `user_id` column of the `user_education` table to the `user_id` column of the `user_details` table. To do this, under the `Modify` tab, click on `edit` next to `user_id`, choose `user_details` as the reference table and `user_id` as the reference column. Click on `Save` to add this foreign key constraint.
 
-![Data Edu FK](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-edu-fk)
+![Data Edu FK](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-edu-fk.png)
 
 Next, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`. 
 
-![Data UserDetails REL](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-rel)
+![Data UserDetails REL](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-rel.png)
 
 Click on `Browse Rows` and you will now see another column called `education` for the `user_details` table.
 
-![Data UserDetails BrowseRows](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-browserows)
+![Data UserDetails BrowseRows](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-browserows.png)
 
 Head to the `API Explorer` and add some data into the `user_education` table for our user (`hasura_id` 2). Ensure that you have added the Authorization header.
 
-![Data QB Insert Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert-edu)
+![Data QB Insert Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert-edu.png)
 
 #### Fetching relationship data 
 
 We can now fetch the education details for each user from the `user_details` table like so (again, Authorization header is mandatory to fetch data from the `user_details` table):
 
-![Data QB Insert Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select-rel)
+![Data QB Insert Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-select-rel.png)
 
 Your response will look like the following:
 
@@ -306,7 +306,7 @@ Your response will look like the following:
 
 Similar to Authentication, you are encouraged to use the `Code Generator` to generate the client side code to make these requests. For eg, this is what it will look like for the our last request:
 
-![Data CodeGen Relation](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-codegen-rel)
+![Data CodeGen Relation](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-codegen-rel.png)
 
 #### TODO: ADD CODE REFERENCE
 
@@ -319,7 +319,7 @@ Some apps require the ability to upload and download files. Hasura provides easy
 
 You can test out the filestore APIs on the `API Explorer` and use the `Code Generator` to include it in your client side code.
 
-![Filestore](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/filestore-explore)
+![Filestore](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/filestore-explore.png)
 
 #### TODO: ADD CODE REFERENCE
 
