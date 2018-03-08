@@ -477,14 +477,6 @@ public void onTokenRefresh() {
         }
       });
 
-      // To execute the call synchronously
-      // try {
-      // 	Response response = client.newCall(request).execute();
-      // 	String responseString = response.body().string(); // handle response
-      // } catch (IOException e) {
-      // 	e.printStackTrace(); // handle error
-      // }
-
     } catch (JSONException e) {
       e.printStackTrace();
     }
