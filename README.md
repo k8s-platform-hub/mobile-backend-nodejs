@@ -6,7 +6,7 @@ This is a tutorial aimed at mobile application developers, namely Android, iOS a
 - Upload and download files to and from the cloud (Filestore)
 - Create a server in nodejs (Custom Microservice):
   - To implement custom business logic
-  - To handle Push notificaions
+  - To handle Push notifications
   - To handle realtime data using websockets
 
 ## Pre-requisites
@@ -24,7 +24,7 @@ Before you begin, ensure that you have the **Hasura CLI** installed on your loca
 $ hasura login
 ```
 
-There are two steps required to get started with a project on Hasura.
+There are two steps required to get started with Hasura.
 
 **Step 1**: Get a Hasura project and a Hasura cluster
 
@@ -114,7 +114,7 @@ We are going with the username "jacksniper" and password "jack@sniper". You can 
 
 - **auth_token** is the authorization token for this particular user, which we will use later to access authorized information. You should save this offline in your app to avoid making your user login each time.
 - **hasura_id** is the id of the user that is automatically assigned by Hasura on signing up. You should save this offline as well.
-- **hasura_roles** are the roles associated with this user. Keep in mind that the role associated with this user is `user`. This is default behaviour. We will get to where this comes into play in a bit. You can read more about roles [here](https://docs.hasura.io/0.15/manual/roles/index.html)
+- **hasura_roles** are the roles associated with this user. Keep in mind that the role associated with this user is `user`. This is default behaviour. We will get to where this comes into play in a bit.
 
 
 ### Login
@@ -127,7 +127,11 @@ In the response that you get, you will see that the `hasura_id` key has the same
 
 ### Authenticated user requests
 
-To perform any authenticated request, you need the user's authentication token (auth_token from the login/signup endpoint) and pass that as a header. In the `API Explorer` of the `API Console`, click on `User Information` under `Logged in User Actions` and hit the `Send` button.
+To perform any authenticated request, you need the user's authentication token (auth_token from the login/signup endpoint) and pass that as a header.
+
+You can find a list of these APIs under the `Logged in User Actions` title on the left panel.
+
+Let's check out one such API. In the `API Explorer` of the `API Console`, click on `User Information` under `Logged in User Actions` and hit the `Send` button.
 
 ![Auth UserInfo Fail](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/auth-info-fail.png)
 
@@ -257,7 +261,7 @@ Since we have given `user` role permission to the `user_details` table, we have 
 
 ### Relationships and Foreign Keys
 
-One of the advantages of using a RDBMS is that you can create connections between various tables through foreign key constraints. These can be used to build more complex relationships, which can be used to fetch related data alongside the columns queried, as pseudo columns.
+You can also create connections between various tables through foreign key constraints. These can be used to build more complex relationships, which can be used to fetch related data alongside the columns queried, as pseudo columns.
 
 To explore this feature, let's create a new table called `user_education` to store information about each user's educational background like `institution_name` and `degree`. We will also have an additional column `id` of type `Integer (auto increment)` and a `user_id` column to store the `hasura_id` of the user. `id` will be the primary key for this table.
 
@@ -277,17 +281,21 @@ Similar to `user_details` table, add `user` permissions on the `user_education` 
 
 ![Data Permissions Edu Delete](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-edu-delete.png)
 
-What we want to achieve now is that when we fetch user details from the `user_details` table, we should also get the respective education data for the user. For this, we are going to create an array relationship from the `user_details` table to the `user_education` table.
+What we want to achieve now is that when we fetch user details from the `user_details` table, we should also get the respective education data for the user.
 
-Now, let's add a foreign key constraint from the `user_id` column of the `user_education` table to the `user_id` column of the `user_details` table. To do this, under the `Modify` tab, click on `edit` next to `user_id`, choose `user_details` as the reference table and `user_id` as the reference column. Click on `Save` to add this foreign key constraint.
+For this, we are going to create an array relationship from the `user_details` table to the `user_education` table. To create a relationship:
+
+**First**, add a foreign key constraint from the `user_id` column of the `user_education` table to the `user_id` column of the `user_details` table. To do this, under the `Modify` tab, click on `edit` next to `user_id`, choose `user_details` as the reference table and `user_id` as the reference column. Click on `Save` to add this foreign key constraint.
 
 ![Data Edu FK](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-edu-fk.png)
 
-Next, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`.
+**Next**, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`.
 
 ![Data UserDetails REL](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-rel.png)
 
 Click on `Browse Rows` and you will now see another column called `education` for the `user_details` table.
+
+>`education` is not really a column, but a pseudo column. You can now use the Data APIs to fetch data from this table which includes education data as well.
 
 ![Data UserDetails BrowseRows](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-browserows.png)
 
@@ -346,7 +354,7 @@ Similar to Authentication, you are encouraged to use the `Code Generator` to gen
 
 ## Image Upload and Download
 
-Some apps require the ability to upload and download files. Hasura provides easy to use APIs to upload and download files as well. Under the `API Explorer` tab, explore the APIs under `File`
+Some apps require the ability to upload and download files, for eg: storing user profile pictures or if you are building an app like google drive. Hasura provides easy to use APIs to upload and download files as well. Under the `API Explorer` tab, explore the APIs under `File`
 
 You can test out the filestore APIs on the `API Explorer` and use the `Code Generator` to include it in your client side code.
 
@@ -393,7 +401,7 @@ FirebaseCloudMessaging(FCM) and ApplePushNotificationsService(APNS) are used to 
 
 FCM has APIs that you need to hit to send push notifications to devices. Each device is identified by a unique token by fcm, hence, you need to ensure that you save the token for each device and associate it with a user's `hasura_id`. There are multiple ways to handle this:
 - Add a new column to the `user_details` table, called `fcm_token` and store the token for each user there.
-- Create a new table, for eg: `user_fcm_token` with columns `user_id` and `fcm_token`.
+- Create a new table, for eg: `user_fcm_tokens` with columns `user_id` and `token`.
 
 Basically, in the callback method of Firebase where you receive the fcm token, you should make a data api to store the fcm_token and associate that with the user. You can either write a custom endpoint to do this or make the data api directly in your client code.
 
@@ -408,10 +416,46 @@ For Android, that would be
 For iOS,
 
 ```swift
-# iOS Code
+func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+  print("Firebase registration token: \(fcmToken)")
+  let url = "https://data.disorder10.hasura-app.io/v1/query"
+
+  // If you have the auth token saved in UserDefaults,
+  // let authToken = UserDefaults.standard.string(forKey: "HASURA_AUTH_TOKEN")
+  // Now you can set the header like so,
+  // let headers: HTTPHeaders? = [
+  // 	"Authorization": "Bearer " + authToken
+  // ]
+  let headers: HTTPHeaders? = [
+      "Content-Type": "application/json",
+      "Authorization": "Bearer 150405479bf396921f336ec08261e73eae4554718700a548"
+  ]
+
+  var requestParam: [String: Any]? = [
+      "type": "insert",
+      "args": [
+          "table": "user_fcm_tokens",
+          "objects": [
+              [
+                  "user_id": "2",
+                  "token": fcmToken
+              ]
+          ]
+      ]
+  ]
+
+  Alamofire.request(url,
+  		method: .post,
+  		parameters: requestParam,
+      encoding: JSONEncoding.default,
+      headers: headers)
+  .responseJSON { response in
+  		debugPrint(response)
+  }
+}
 ```
 
-Now, whenever you want to send a push notification to a user, you will fetch the associated fcm_token from the user's `user_id` and then hit the fcm api to send the push notfication.
+Now, whenever you want to send a push notification to a user, you will fetch the associated fcm_token from the user's `user_id` and then hit the fcm api to send the push notification.
 
 >There is an example of doing this in the `api` microservice, you can find the code for it at `microservices/api/src/push-notif/routes` defined as the `"/test_push"`.
 

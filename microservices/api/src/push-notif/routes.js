@@ -21,7 +21,7 @@ router.post('/register_device', (req, resp) => {
       'body': JSON.stringify({
         'type': 'insert',
         'args': {
-          'table': 'fcm_tokens',
+          'table': 'user_fcm_tokens',
           'objects': [
             {
               'user_id': identity.user_id,
@@ -70,7 +70,7 @@ router.post('/test_push', (req, resp) => {
   }
 
   const dataPayload = req.body.payload;
-  
+
   if (!dataPayload) {
     resp.status(400).send({error: 'No payload present in request'});
     return;
