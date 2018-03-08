@@ -1,7 +1,7 @@
 - alias: hasura
   config:
     configmap: controller-conf
-    namespace: implode62-hasura
+    namespace: hasura
   data: null
-  kubeContext: implode62
-  name: implode62
+  kubeContext: h34-doghouse98-stg
+  name: h34-doghouse98-stg
