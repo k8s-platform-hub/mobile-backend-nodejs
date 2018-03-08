@@ -28,7 +28,7 @@ There are two steps required to get started with Hasura.
 
 **Step 1**: Get a Hasura project and a Hasura cluster
 
->A **hasura project** is a folder on your filesystem that contains all the source code and configuration for your application. A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub. Every project you see on hasura.io/hub is a `Hasura Project` with particular services or data added to it based on the type of project it is.
+>A **hasura project** is a folder on your filesystem that contains all the source code and configuration for your application. A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub. Every project you see on hasura.io/hub is a `Hasura Project` with particular services or data added to it based on the type of project it is. To know more about a Hasura Project, check out the [docs](https://docs.hasura.io/0.15/manual/project/index.html).
 
 We are going to clone the `mobile-backend-nodejs` project which consists of:
 - Boilerplate code for a nodejs server to handle push notifications and a websocket connection
@@ -45,7 +45,7 @@ The above command does the following:
 - Makes this new directory a `git` repository and adds a remote called `hasura` to it.
 - It also creates a free `Hasura Cluster` for you and `adds` this cluster to the cloned hasura project.
 
->A **Hasura cluster** is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`.
+>A **Hasura cluster** is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project. Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`. Know more [here](https://docs.hasura.io/0.15/manual/cluster/index.html).
 
 **Step 2**: Deploy the project to your cluster
 
@@ -58,7 +58,9 @@ $ # Push to the hasura remote
 $ git push hasura master
 ```
 
-**Step 3**: Set the cluster name in the client apps
+>
+
+### Setting the cluster name in the client apps
 
 - iOS:
   - Open the iOS app present in the root directory of the project.
@@ -187,7 +189,12 @@ You can now copy and paste this into your client.
   - The code for Authentication can be found in the `AuthActivity`.
 - React Native: TODO
 
-> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+>Advanced use cases:
+- [Other authentication providers](https://docs.hasura.io/0.15/manual/auth/providers/index.html)
+- [Understanding how the auth session works](https://docs.hasura.io/0.15/manual/auth/sessions.html)
+- [Auth Configuration](https://docs.hasura.io/0.15/manual/auth/config.html)
+- [Admin user actions](https://docs.hasura.io/0.15/manual/auth/admin-actions/index.html)
+- [Authentication user actions](https://docs.hasura.io/0.15/manual/auth/user-actions/index.html)
 
 ## Database
 
@@ -365,7 +372,7 @@ Similar to Authentication, you are encouraged to use the `Code Generator` to gen
   - The code for Data can be found in the `DataActivity.java` file.
 - React Native: TODO
 
-> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+>For advanced use cases, it is recommended to go through our [docs](https://docs.hasura.io/0.15/manual/data/index.html).
 
 ## Image Upload and Download
 
@@ -387,7 +394,7 @@ You can test out the filestore APIs on the `API Explorer` and use the `Code Gene
   - The code can be found in the `DataActivity.java` file.
 - React Native: TODO
 
-> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+>Go though the [docs](https://docs.hasura.io/0.15/manual/filestore/index.html), to know more about the filestore and to understand how you can set permissions on it.
 
 
 ## Writing your own custom microservice
@@ -405,7 +412,7 @@ You can open the url to this microservice on your web browser by running the fol
 $ hasura microservice open api
 ```
 
->Every Hasura cluster comes with a few default microservices, all the backend feature we have used until now is a **Microservice**. Authentication is provided by the `auth` microservice, the data APIS by the `data` microservice, file upload and download by the `filestore` microservice. To take a look at the available microservices, run `$ hasura microservice list` on your terminal, inside the project directory. Hence, it is only natural that if you want additional features, you would simply create a new microservice. All custom microservices can be found inside the `microservices` directory.
+>Every Hasura cluster comes with a few default microservices, all the backend feature we have used until now is a **Microservice**. Authentication is provided by the `auth` microservice, the data APIS by the `data` microservice, file upload and download by the `filestore` microservice. To take a look at the available microservices, run `$ hasura microservice list` on your terminal, inside the project directory. Hence, it is only natural that if you want additional features, you would simply create a new microservice. All custom microservices can be found inside the `microservices` directory. You can learn more about microservices on Hasura [here](https://docs.hasura.io/0.15/manual/custom-microservices/index.html).
 
 The code for this microservice can be found inside the `microservices/api/src`
 
