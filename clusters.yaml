@@ -1,7 +1,7 @@
 - alias: hasura
   config:
     configmap: controller-conf
-    namespace: hasura
+    namespace: babushka20-hasura
   data: null
-  kubeContext: afterbirth27
-  name: afterbirth27
+  kubeContext: babushka20
+  name: babushka20
