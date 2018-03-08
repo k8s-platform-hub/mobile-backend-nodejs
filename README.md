@@ -11,7 +11,7 @@ This is a tutorial aimed at mobile application developers, namely Android, iOS a
 
 ## Pre-requisites
 
-- Basic knowledge of either Android, iOS or React Native application development. 
+- Basic knowledge of either Android, iOS or React Native application development.
 - A basic knowledge of Javascript or atleast the readiness to pick it up.
 - A basic understanding of relational databases.
 - `git` installed on your local machine and also a basic knowledge of using `git`
@@ -58,9 +58,27 @@ $ # Push to the hasura remote
 $ git push hasura master
 ```
 
+**Step 3**: Set the cluster name in the client apps
+
+- iOS:
+ - Open the iOS app present in the root directory of the project.
+ - Navigate to a file named `Hasura`
+ - Replace the value for the variable `clusterName` with the name of your cluster.
+
+ ```swift
+ func getURL() -> String {
+    //Replace the following your cluster name
+    let clusterName = "disorder10"
+    return "https://" + self.rawValue + "." + clusterName + ".hasura-app.io/"
+  }
+ ```
+ #### TODO ANDROID and REACT NATIVE
+
+
+
 ## The API Console
 
-Every Hasura cluster comes with an `API Console` that you can use to explore the various backend features provided by Hasura. To access the API console, 
+Every Hasura cluster comes with an `API Console` that you can use to explore the various backend features provided by Hasura. To access the API console,
 
 ```bash
 $ # Run the following inside the project directory
@@ -73,7 +91,7 @@ This will open up the console on your browser. You can access it at http://local
 
 Every modern app almost always requires some form of authentication. This is useful to identify a user and provide some sort of personalized experience to the user. Hasura provides various types of authentication methods (username/password, mobile/otp, email/password, Google, Facebook etc).
 
-In this tutorial, we are going to take a look at a simple username/password based authentication. Start by opening up the `API Console`. Ensure that you are on the `API Explorer` tab. 
+In this tutorial, we are going to take a look at a simple username/password based authentication. Start by opening up the `API Console`. Ensure that you are on the `API Explorer` tab.
 
 ### Signup
 
@@ -94,7 +112,7 @@ We are going with the username "jacksniper" and password "jack@sniper". You can 
 }
 ```
 
-- **auth_token** is the authorization token for this particular user, which we will use later to access authorized information. You should save this offline in your app to avoid making your user login each time. 
+- **auth_token** is the authorization token for this particular user, which we will use later to access authorized information. You should save this offline in your app to avoid making your user login each time.
 - **hasura_id** is the id of the user that is automatically assigned by Hasura on signing up. You should save this offline as well.
 - **hasura_roles** are the roles associated with this user. Keep in mind that the role associated with this user is `user`. This is default behaviour. We will get to where this comes into play in a bit. You can read more about roles [here](https://docs.hasura.io/0.15/manual/roles/index.html)
 
@@ -144,15 +162,22 @@ Select your required language and library from the drop down on the left.
 
 You can now copy and paste this into your client.
 
-#### TODO: ADD CODE REFERENCE
+### Mobile App Reference
+
+- iOS:
+  - Run the iOS app
+  - Click on `Authenticate` in the landing screen to see a working example of Authentication.
+  - You can find the code for Authentication in the `AuthViewController.swift` file.
+- Android: TODO
+- React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
 
 ## Database
 
-Most apps require a database to store and retrieve information from. This can be user specific information or contextual data in general which you do not want to store locally in your app or you maybe want to share a certain set of data with every user of your app. Ideally, you would want to store this in a database on the cloud and access or modify it based on certain events on your app. 
+Most apps require a database to store and retrieve information from. This can be user specific information or contextual data in general which you do not want to store locally in your app or you maybe want to share a certain set of data with every user of your app. Ideally, you would want to store this in a database on the cloud and access or modify it based on certain events on your app.
 
-Let's explore how we can do this on Hasura. Head back to the `API Console` and ensure that you are on the `Data` tab. 
+Let's explore how we can do this on Hasura. Head back to the `API Console` and ensure that you are on the `Data` tab.
 
 ![Data Tab](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-tab.png)
 
@@ -170,7 +195,7 @@ Every table created on Hasura can only be accessed by users with an `admin` role
 
 In our case, `user_details` table is used to store user specific data. We want to give every logged in user permission to insert and select their own data from the `user_details` table. Moreover, as an extra security measure, they should not be able to fetch another users data either.
 
-Under the `Data` tab of the `API Console`, select `user_details` from the left panel and then click on the `Permissions` tab on the right to set permissions for the table. As you can see, an `admin` role has complete permission over the table. No other role has any permission. 
+Under the `Data` tab of the `API Console`, select `user_details` from the left panel and then click on the `Permissions` tab on the right to set permissions for the table. As you can see, an `admin` role has complete permission over the table. No other role has any permission.
 
 ![Data Permissions](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions.png)
 
@@ -178,13 +203,13 @@ Under the `Data` tab of the `API Console`, select `user_details` from the left p
 
 ![Data Permissions Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-insert.png)
 
-The permissions set above translates to: *Allow a user to insert into the `user_details` table only if the `user_id` being inserted is the same as the `hasura_id` associated with the user's `auth_token` which is passed as the Authorization token in the header* 
+The permissions set above translates to: *Allow a user to insert into the `user_details` table only if the `user_id` being inserted is the same as the `hasura_id` associated with the user's `auth_token` which is passed as the Authorization token in the header*
 
 **Second**, lets give the `user` role permission to get their data from the table. Click on select next to the user row, check the `with same checks as insert`, also click on the `Toggle All` button next to `With Access to columns`. Click on `Save Permissions`.
 
 ![Data Permissions Select](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-permissions-select.png)
 
-The permissions set above translates to: *Let the user only read rows from the `user_details` table where the `user_id` is equal to the `hasura_id` of the user which is passed as the Authorization token in the header. Moreover, allow the user to only read the selected columns, in this case, user_id, name and gender* 
+The permissions set above translates to: *Let the user only read rows from the `user_details` table where the `user_id` is equal to the `hasura_id` of the user which is passed as the Authorization token in the header. Moreover, allow the user to only read the selected columns, in this case, user_id, name and gender*
 
 **Third**, update permissions
 
@@ -206,7 +231,7 @@ Click on `Save Permissions`.
 
 Now that we have created our table and also given it permissions, let's see how the API to insert data into the table looks like.
 
-Head to the `API Explorer` tab and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `insert` to insert into a table. 
+Head to the `API Explorer` tab and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `insert` to insert into a table.
 
 ![Data QB Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert.png
 
@@ -258,7 +283,7 @@ Now, let's add a foreign key constraint from the `user_id` column of the `user_e
 
 ![Data Edu FK](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-edu-fk.png)
 
-Next, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`. 
+Next, open up the `user_details` table from the left panel and click on the `Relationships` tab. If you have followed the instructions above correctly, you will now have an entry under the `Suggested Array Relationship` column. Click on `Add` and name the relationship `education` and hit `Save`.
 
 ![Data UserDetails REL](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-userdetails-rel.png)
 
@@ -270,7 +295,7 @@ Head to the `API Explorer` and add some data into the `user_education` table for
 
 ![Data QB Insert Edu](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert-edu.png)
 
-#### Fetching relationship data 
+#### Fetching relationship data
 
 We can now fetch the education details for each user from the `user_details` table like so (again, Authorization header is mandatory to fetch data from the `user_details` table):
 
@@ -308,10 +333,16 @@ Similar to Authentication, you are encouraged to use the `Code Generator` to gen
 
 ![Data CodeGen Relation](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-codegen-rel.png)
 
-#### TODO: ADD CODE REFERENCE
+### Mobile App Reference
+
+- iOS:
+  - Run the iOS app
+  - Click on `Data` in the landing screen to see a working example of fetching user details.
+  - You can find the code in the `DataViewController.swift` file.
+- Android: TODO
+- React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
-
 
 ## Image Upload and Download
 
@@ -321,9 +352,17 @@ You can test out the filestore APIs on the `API Explorer` and use the `Code Gene
 
 ![Filestore](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/filestore-explore.png)
 
-#### TODO: ADD CODE REFERENCE
+### Mobile App Reference
+
+- iOS:
+  - Run the iOS app
+  - Click on `Filestore` in the landing screen to see a working example of image upload.
+  - You can find the code in the `FilestoreViewController.swift` file.
+- Android: TODO
+- React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
+
 
 ## Writing your own custom microservice
 
@@ -362,23 +401,23 @@ FCM has APIs that you need to hit to send push notifications to devices. Each de
 - Add a new column to the `user_details` table, called `fcm_token` and store the token for each user there.
 - Create a new table, for eg: `user_fcm_token` with columns `user_id` and `fcm_token`.
 
-Basically, in the callback method of Firebase where you receive the fcm token, you should make a data api to store the fcm_token and associate that with the user. You can either write a custom endpoint to do this or make the data api directly in your client code. 
+Basically, in the callback method of Firebase where you receive the fcm token, you should make a data api to store the fcm_token and associate that with the user. You can either write a custom endpoint to do this or make the data api directly in your client code.
 
->The `api` microservice includes an example of writing a custom endpoint for doing this at `microservices/api/src/push-notif/routes` defined as the `"/register_device"` route. 
+>The `api` microservice includes an example of writing a custom endpoint for doing this at `microservices/api/src/push-notif/routes` defined as the `"/register_device"` route.
 
-For Android, that would be 
+For Android, that would be
 
 ```java
 # Android code
 ```
 
-For iOS, 
+For iOS,
 
 ```swift
 # iOS Code
 ```
 
-Now, whenever you want to send a push notification to a user, you will fetch the associated fcm_token from the user's `user_id` and then hit the fcm api to send the push notfication. 
+Now, whenever you want to send a push notification to a user, you will fetch the associated fcm_token from the user's `user_id` and then hit the fcm api to send the push notfication.
 
 >There is an example of doing this in the `api` microservice, you can find the code for it at `microservices/api/src/push-notif/routes` defined as the `"/test_push"`.
 
@@ -387,9 +426,9 @@ Now, whenever you want to send a push notification to a user, you will fetch the
 
 #### Storing the FCM key in the server the right way
 
-Ideally, you should pass the FCM key as an environment variable to the server and not hard code it in the source code. To do this, you need to add the key as a secret into Hasura and then edit the `k8s.yaml` file inside `microservices/api/` to pass that as an environment variable. 
+Ideally, you should pass the FCM key as an environment variable to the server and not hard code it in the source code. To do this, you need to add the key as a secret into Hasura and then edit the `k8s.yaml` file inside `microservices/api/` to pass that as an environment variable.
 
-**Step 1**: Add FCM key to Hasura secrets 
+**Step 1**: Add FCM key to Hasura secrets
 
 ```bash
 $ # Replace <WEB API KEY> with the FCM Key
@@ -414,14 +453,8 @@ WebSockets are a technology that makes it possible to open an interactive commun
 
 Chat apps are the most common use cases for Websockets. We are going to use [Socket.io](https://socket.io/), which is basically a Javascript framework implementing the Websockets protocol.
 
-`microservices/api/src/server.js` has a simple setup done using `socket.io`. 
+`microservices/api/src/server.js` has a simple setup done using `socket.io`.
 
 #### TODO: DOC REFERENCE
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
 For more information on using socket.io, it is recommended to check their [docs](https://socket.io/docs/).
-
-
-
-
-
-

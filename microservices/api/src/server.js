@@ -10,12 +10,14 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-const serverRoutes = require("./custom-logic/routes");
+const customRoutes = require("./custom-logic/routes");
+const pushNotifRoutes = require("./push-notif/routes");
 
 const socketClient = require("socket.io");
 const io = socketClient(server);
 
 app.use(serverRoutes);
+app.use(pushNotifRoutes);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", req.get("origin"));
