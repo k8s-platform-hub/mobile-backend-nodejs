@@ -72,9 +72,19 @@ $ git push hasura master
     return "https://" + self.rawValue + "." + clusterName + ".hasura-app.io/"
   }
  ```
- #### TODO ANDROID and REACT NATIVE
+- Android:
+  - Open the Android app present in the root directory of the project.
+  - Navigate to a file named `Hasura`
+  - Replace the value for the variable `CLUSTER_NAME` with the name of your cluster.
 
-
+  ```java
+  public class Config {
+        //Replace the following with your cluster name
+        private static final String CLUSTER_NAME = "disorder10";
+        ......
+    }
+  ```
+ #### REACT NATIVE
 
 ## The API Console
 
@@ -172,7 +182,10 @@ You can now copy and paste this into your client.
   - Run the iOS app
   - Click on `Authenticate` in the landing screen to see a working example of Authentication.
   - You can find the code for Authentication in the `AuthViewController.swift` file.
-- Android: TODO
+- Android:
+  - Run the Android app
+  - Click on `Authentication` in the landing screen to see a working example of Authentication.
+  - The code for Authentication can be found in the `AuthActivity`.
 - React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
@@ -347,7 +360,10 @@ Similar to Authentication, you are encouraged to use the `Code Generator` to gen
   - Run the iOS app
   - Click on `Data` in the landing screen to see a working example of fetching user details.
   - You can find the code in the `DataViewController.swift` file.
-- Android: TODO
+- Android:
+  - Run the iOS app
+  - Click on `Data` in the landing screen to see a working example of fetching user details.
+  - The code for Data can be found in the `DataActivity.java` file.
 - React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
@@ -366,7 +382,10 @@ You can test out the filestore APIs on the `API Explorer` and use the `Code Gene
   - Run the iOS app
   - Click on `Filestore` in the landing screen to see a working example of image upload.
   - You can find the code in the `FilestoreViewController.swift` file.
-- Android: TODO
+- Android:
+  - Run the Android app
+  - Click on `Data` in the landing screen to see a working example of this.
+  - The code can be found in the `DataActivity.java` file.
 - React Native: TODO
 
 > For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
@@ -410,7 +429,67 @@ Basically, in the callback method of Firebase where you receive the fcm token, y
 For Android, that would be
 
 ```java
-# Android code
+@Override
+public void onTokenRefresh() {
+    super.onTokenRefresh();
+    // Get updated InstanceID token.
+    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+    Log.d(TAG, "Refreshed token: " + refreshedToken);
+
+    String url = "https://data.disorder10.hasura-app.io/v1/query";
+
+    try {
+      OkHttpClient client = new OkHttpClient();
+
+      MediaType mediaType = MediaType.parse("application/json");
+      JSONObject jsonObject = new JSONObject()
+      .put("type", "insert")
+      .put("args", new JSONObject()
+        .put("table", "user_fcm_tokens")
+        .put("objects", new JSONArray()
+          .put(new JSONObject()
+            .put("token", refreshedToken)
+            .put("user_id", "2")
+          )
+        )
+      );
+
+      RequestBody body = RequestBody.create(mediaType, jsonObject.toString());
+      // If you have the auth token saved in shared prefs
+      // SharedPreferences prefs = context.getSharedPreferences("PREFS_NAME", Context.MODE_PRIVATE);
+      // String authToken = prefs.getString("HASURA_AUTH_TOKEN", null);
+      // You can now use this auth token in your header like so,
+      // .addHeader(Authorization, "Bearer " + authToken);
+      Request request = new Request.Builder()
+        .url(url)
+        .post(body)
+        .addHeader("Authorization", "Bearer 150405479bf396921f336ec08261e73eae4554718700a548")
+        .build();
+
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(okhttp3.Call call, IOException e) {
+          //Handle failure
+        }
+
+        @Override
+        public void onResponse(okhttp3.Call call, Response response) throws IOException {
+          // Handle success
+        }
+      });
+
+      // To execute the call synchronously
+      // try {
+      // 	Response response = client.newCall(request).execute();
+      // 	String responseString = response.body().string(); // handle response
+      // } catch (IOException e) {
+      // 	e.printStackTrace(); // handle error
+      // }
+
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+}
 ```
 
 For iOS,
@@ -497,7 +576,10 @@ The socket listens at `https:api.<cluster-name>.hasura-app.io` (replace `<cluste
   - Run the iOS app
   - Click on `Websockets` in the landing screen to see a working example of websockets. Currently, the server will just respond with a "The message your sent is: <your-message>".
   - You can find the code in the `WebsocketViewController.swift` file.
-- Android: TODO
+- Android:
+  - Run the Android app
+  - Click on `Websockets` in the landing screen to see a working example of websockets. Currently, the server will just respond with a "The message your sent is: <your-message>".
+  - You can find the code in the `WebsocketViewController.swift` file.
 - React Native: TODO
 
 >For more information on using socket.io, it is recommended to check their [docs](https://socket.io/docs/).

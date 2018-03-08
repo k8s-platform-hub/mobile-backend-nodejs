@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jaison.app_android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".auth.AuthActivity"/>
-        <activity android:name=".data.ArticleListActivity" />
-        <activity android:name=".filestore.FilestoreActivity"></activity>
+        <activity android:name=".auth.AuthActivity" />
+        <activity android:name=".filestore.FilestoreActivity" />
+        <activity android:name=".websockets.WebsocketActivity" />
+        <activity android:name=".data.DataActivity"></activity>
     </application>
 
 </manifest>

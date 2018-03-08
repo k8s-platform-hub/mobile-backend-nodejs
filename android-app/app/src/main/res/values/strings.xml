@@ -2,8 +2,9 @@
     <string name="app_name">app-android</string>
     <string name="app_description">This is an example app that show cases using Hasura as its backend. This example makes use of three of Hasura's baas components.</string>
     <string name="auth_description">1. AUTH APIs: These are used to authenticate the users in your app by providing them with a way to login/signup. Click on the **Authentication** button to explore it further.</string>
-    <string name="data_description">2. DATA APIs: These are APIs that can be used to perform CRUD on your tables. Click on **View Articles** to see a list of articles fetched from the **articles** table.</string>
+    <string name="data_description">2. DATA APIs: These are APIs that can be used to perform CRUD on your tables. Click on **Data** to see a user details fetched from the user_details table</string>
     <string name="file_description">3. FILESTORE APIs: These can be used to upload or download files (like images for profile pics etc). Click on **Filestore** to explore further.</string>
+    <string name="websocket_description">4. WEBSOCKETS: These are used to have real time communication. Uses socket.io</string>
     <string name="auth_description_detailed">Every app requires some way to authenticate their users, the Hasura AUTH APIs provide just that. There are different types of providers that you can opt for, like, USERNAME/PASSWORD, MOBILE/OTP, EMAIL/PASSWORD, FACEBOOK, GOOGLE etc. This example uses the USERNAME/PASSWORD provider to authenticate the users. The code for this activity can be found in **AuthActivity**</string>
     <string name="logout">Looks like you are already logged in. To logout, click on the logout button.</string>
     <string name="data_description_detailed">The following articles are fetched from the **articles** table. Use the Hasura API Console (run $ hasura api-console on your terminal) to explore the DATA APIs. The code for this activity can be found in the **ArticleListActivity**.</string>

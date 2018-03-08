@@ -6,21 +6,19 @@
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/institution"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:text="Article title"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/degree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:singleLine="true"
-        android:text="Article content....." />
+        android:singleLine="true" />
 
     <FrameLayout
         android:layout_width="match_parent"

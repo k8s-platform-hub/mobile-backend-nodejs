@@ -11,10 +11,11 @@ public class Hasura {
 
     public class Config {
         //Replace the following with your cluster name
-        private static final String CLUSTER_NAME = "cluster-name";
+        private static final String CLUSTER_NAME = "babushka20";
         public static final String AUTH_URL = "https://auth." + CLUSTER_NAME + ".hasura-app.io/v1/";
         public static final String DATA_URL = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/";
         public static final String FILESTORE_URL = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/";
+        public static final String CUSTOM = "https://api." + CLUSTER_NAME + ".hasura-app.io";
     }
 
     private static final String PREF_NAME = "SharedPrefName";
