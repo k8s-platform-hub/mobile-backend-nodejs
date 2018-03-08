@@ -1,2 +1,5 @@
 # gitignore like file
 # files and directories mentioned here will be ignored while publishing to hasura
+iOS-app
+android-app
+react-native
