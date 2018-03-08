@@ -61,9 +61,9 @@ $ git push hasura master
 **Step 3**: Set the cluster name in the client apps
 
 - iOS:
- - Open the iOS app present in the root directory of the project.
- - Navigate to a file named `Hasura`
- - Replace the value for the variable `clusterName` with the name of your cluster.
+  - Open the iOS app present in the root directory of the project.
+  - Navigate to a file named `Hasura`
+  - Replace the value for the variable `clusterName` with the name of your cluster.
 
  ```swift
  func getURL() -> String {
@@ -84,7 +84,6 @@ $ git push hasura master
         ......
     }
   ```
- #### REACT NATIVE
 
 ## The API Console
 
