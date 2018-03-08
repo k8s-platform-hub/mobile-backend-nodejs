@@ -249,7 +249,7 @@ Now that we have created our table and also given it permissions, let's see how 
 
 Head to the `API Explorer` tab and click on `v1/query - Query Builder` on the left panel. Click on `type` and select `insert` to insert into a table.
 
-![Data QB Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert.png
+![Data QB Insert](https://raw.githubusercontent.com/hasura/mobile-backend-nodejs/master/readme-assets/data-qb-insert.png)
 
 Next, click on `table` and select `user_details` from the list. Fill in the `objects` array with data you want inserted into the table. In the picture shown below, we are adding data for the user we signed up with (`hasura_id`: 2)
 
