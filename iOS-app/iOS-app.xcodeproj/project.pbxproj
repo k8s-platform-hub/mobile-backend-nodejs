@@ -10,6 +10,7 @@
 		0ACB38BDB7CACE7851E81D0F /* Pods_iOS_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFF00E4D2857B1DE2306948 /* Pods_iOS_app.framework */; };
 		DA3CB8661FAC8E290074C45D /* FilestoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3CB8651FAC8E290074C45D /* FilestoreViewController.swift */; };
 		DA92F2022050F70300253274 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA92F2012050F70300253274 /* DataViewController.swift */; };
+		DA92F204205108A400253274 /* WebsocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA92F203205108A400253274 /* WebsocketViewController.swift */; };
 		DAA4F6001FAC265B00B458A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA4F5FF1FAC265B00B458A2 /* AppDelegate.swift */; };
 		DAA4F6051FAC265B00B458A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA4F6031FAC265B00B458A2 /* Main.storyboard */; };
 		DAA4F6071FAC265B00B458A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA4F6061FAC265B00B458A2 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		CBFF00E4D2857B1DE2306948 /* Pods_iOS_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3CB8651FAC8E290074C45D /* FilestoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilestoreViewController.swift; sourceTree = "<group>"; };
 		DA92F2012050F70300253274 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
+		DA92F203205108A400253274 /* WebsocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketViewController.swift; sourceTree = "<group>"; };
 		DAA4F5FC1FAC265B00B458A2 /* iOS-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAA4F5FF1FAC265B00B458A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAA4F6041FAC265B00B458A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				DA92F2012050F70300253274 /* DataViewController.swift */,
 				DAA4F6151FAC35E700B458A2 /* LauncherViewController.swift */,
 				DA3CB8651FAC8E290074C45D /* FilestoreViewController.swift */,
+				DA92F203205108A400253274 /* WebsocketViewController.swift */,
 			);
 			path = HasuraExamples;
 			sourceTree = "<group>";
@@ -193,11 +196,15 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-iOS-app/Pods-iOS-app-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -250,6 +257,7 @@
 				DAA4F61A1FAC481800B458A2 /* Hasura.swift in Sources */,
 				DA3CB8661FAC8E290074C45D /* FilestoreViewController.swift in Sources */,
 				DAA4F6181FAC3F7900B458A2 /* +UIViewController.swift in Sources */,
+				DA92F204205108A400253274 /* WebsocketViewController.swift in Sources */,
 				DAA4F6001FAC265B00B458A2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

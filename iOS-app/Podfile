@@ -6,8 +6,7 @@ target 'iOS-app' do
   use_frameworks!
   pod 'Alamofire', '~> 4.7'
   pod 'AlamofireNetworkActivityLogger', '~> 2.3'
-
-
+  pod 'Socket.IO-Client-Swift', '~> 13.1.0'
   # Pods for iOS-app
 
 end

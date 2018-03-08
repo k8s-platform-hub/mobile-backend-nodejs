@@ -387,12 +387,6 @@ The code for this microservice can be found inside the `microservices/api/src`
 
 Navigate to `microservices/api/src/custom-logic/routes.js` to see how to define a custom route. There are two examples in it, one is a definition for a `GET` request at `"/"` and the other for a `POST` request at `"/echo"`. The `"/"` route just returns a "Hello World" and the `"/echo"` endpoint just returns whatever you send to it.
 
-You can try these out in the `API Explorer`.
-
-#### TODO IMAGE
-
-#### TODO IMAGE
-
 ### Push Notifications
 
 FirebaseCloudMessaging(FCM) and ApplePushNotificationsService(APNS) are used to send push notifications to Android and iOS devices respectively. FCM, also has support for APNS, which means that they have a wrapper over the APNS APIs. This project makes use of FCM for its push notification needs. Follow the instructions given in their docs to integrate Firebase into your Android and(or) iOS app.
@@ -443,10 +437,6 @@ Run the following from the root directory of the project.
 $ cp microservices/api/k8s.fcm.yaml microservices/api/k8s.yaml
 ```
 
-#### TODO: DOC REFERENCE
-> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
-
-
 ### Websockets
 
 WebSockets are a technology that makes it possible to open an interactive communication session between a client app and a server. With this API, you can send messages to a server and receive event-driven responses without having to poll the server for a reply.
@@ -455,6 +445,15 @@ Chat apps are the most common use cases for Websockets. We are going to use [Soc
 
 `microservices/api/src/server.js` has a simple setup done using `socket.io`.
 
-#### TODO: DOC REFERENCE
-> For advanced use cases and to explore other providers, check out the [docs](https://docs.hasura.io/0.15/manual/users/index.html).
-For more information on using socket.io, it is recommended to check their [docs](https://socket.io/docs/).
+The socket listens at `https:api.<cluster-name>.hasura-app.io` (replace `<cluster_name>` with the name of your cluster). It listens to the topic "message" and responds with an echo of whatever you send.
+
+### Mobile App Reference
+
+- iOS:
+  - Run the iOS app
+  - Click on `Websockets` in the landing screen to see a working example of websockets. Currently, the server will just respond with a "The message your sent is: <your-message>".
+  - You can find the code in the `WebsocketViewController.swift` file.
+- Android: TODO
+- React Native: TODO
+
+>For more information on using socket.io, it is recommended to check their [docs](https://socket.io/docs/).

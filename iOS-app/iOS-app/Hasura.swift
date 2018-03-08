@@ -15,10 +15,11 @@ class Hasura {
         case auth = "auth"
         case filestore = "filestore"
         case data = "data"
+        case custom = "api"
         
         func getURL() -> String {
             //Replace the following your cluster name
-            let clusterName = "disorder10"
+            let clusterName = "babushka20"
             return "https://" + self.rawValue + "." + clusterName + ".hasura-app.io/"
         }
     }

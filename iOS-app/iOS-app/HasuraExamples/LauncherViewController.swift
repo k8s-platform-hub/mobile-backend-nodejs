@@ -35,4 +35,9 @@ class LauncherViewController: UIViewController {
         }
     }
     
+    @IBAction func onWebsocketsClicked(_ sender: UIButton) {
+        if let websocketVC = storyBoard.instantiateViewController(withIdentifier: "WebsocketNavVC") as? UINavigationController {
+            self.present(websocketVC, animated: true, completion: nil)
+        }
+    }
 }
