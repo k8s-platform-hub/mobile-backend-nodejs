@@ -16,7 +16,7 @@ const pushNotifRoutes = require("./push-notif/routes");
 const socketClient = require("socket.io");
 const io = socketClient(server);
 
-app.use(serverRoutes);
+app.use(customRoutes);
 app.use(pushNotifRoutes);
 
 app.use(function(req, res, next) {
