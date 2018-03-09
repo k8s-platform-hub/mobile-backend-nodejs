@@ -6,7 +6,7 @@
 # Configuration for default providers
 # Each provider has the following fields:
 # `enabled` : To mark if the provider is enabled. Valid values are "true" or
-# "false".
+# "true".
 # `defaultRoles`: Specify the roles that get added when a user signs-up. By
 # default the user role is added (even when the list does not contain "user").
 # If you do not want any extra roles, leave it as an empty list.
@@ -18,25 +18,25 @@ defaultProviders:
     enabled: "true"
     defaultRoles: []
   email:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   mobile:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   mobile-password:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   google:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   facebook:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   github:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   linkedin:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
 
 
@@ -117,29 +117,23 @@ password:
 # Below fields are all optional
 #
 # Configuration for google provider
-#google:
-#  # list of the all the client ids generated for your Google app
-#  clientIds: ["xxxxxx", "yyyyyy"]
+google:
+  clientIds: ["xxxxxx", "yyyyyy"]
 #
 # Configuration for facebook provider
-#facebook:
-#  # your facebook app client id
-#  clientId: xxxxxxxxx
-#  # your facebook app client secret
-#  clientSecret:
-#    secretKeyRef:
-#      key: auth.facebook.client_secret
-#      name: hasura-secrets
-#
+facebook:
+  clientId: xxxxxxxxx
+  clientSecret:
+    secretKeyRef:
+      key: auth.facebook.client_secret
+      name: hasura-secrets
 # Configuration for github provider
-#github:
-#  # your github app client id
-#  clientId: xxxxxxxxx
-#  # your github app client secret
-#  clientSecret:
-#    secretKeyRef:
-#      key: auth.github.client_secret
-#      name: hasura-secrets
+github:
+  clientId: xxxxxxxxx
+  clientSecret:
+    secretKeyRef:
+      key: auth.github.client_secret
+      name: hasura-secrets
 #
 # Configuration for linkedin provider
 #linkedin:
