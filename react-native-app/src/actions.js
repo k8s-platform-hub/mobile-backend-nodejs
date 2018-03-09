@@ -61,6 +61,47 @@ const tryLogin = async (username, password) => {
   }
 }
 
+const fetchUserDetails = async (token) => {
+  const dataUrl = `https://data.${clusterName}.hasura-app.io/v1/query`;
+  const options = {
+    'method': 'POST',
+    'headers': {
+      'Authorization': 'Bearer ' + token
+      'Content-Type': 'application/json'
+    },
+    'body': JSON.stringify({
+      'type': 'select',
+      'args': {
+        'table': 'user_details',
+        'columns': [
+          '*',
+          {
+            'name': 'education',
+            'columns': [
+              '*'
+            ]
+          }
+        ]
+      }
+    })
+  };
+
+  try {
+    const response = await fetch(dataUrl, options);
+    const respObj = await response.json();
+    if (response.status == 200) {
+      return {
+        success: true,
+        data: respObj
+      }
+    }
+    return respObj;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
 const storeSession = async (sessionObj) => {
   try {
     console.log(AsyncStorage);
@@ -84,6 +125,7 @@ const fetchSession = async () => {
 export {
   trySignup,
   tryLogin,
+  fetchUserDetails,
   storeSession,
   fetchSession
 };

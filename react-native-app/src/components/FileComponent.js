@@ -135,7 +135,7 @@ uploadImageAsync = async (uri, token) => {
     method: 'POST',
     body: formData,
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'image/png',
       'Authorization': 'Bearer ' + token
     },
   };

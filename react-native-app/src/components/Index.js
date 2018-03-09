@@ -4,6 +4,7 @@ import {AppLoading} from 'expo';
 import socketIOClient from 'socket.io-client';
 import AuthScreen from './AuthScreen';
 import FileComponent from './FileComponent';
+import DataComponent from './DataComponent';
 import SocketIO from './SocketIO';
 import {clusterName} from '../../Hasura';
 import {fetchSession} from '../actions';
