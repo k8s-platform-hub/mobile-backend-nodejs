@@ -118,11 +118,11 @@ password:
 #
 # Configuration for google provider
 google:
-  clientIds: ["xxxxxx", "yyyyyy"]
+  clientIds: ["xxxxxx", "795709254723-jifsklq6vodckdl59r16e2aj3or2evpe.apps.googleusercontent.com", "795709254723-hv98obk8l39dvnbaor0pol4et0udkq2p.apps.googleusercontent.com"]
 #
 # Configuration for facebook provider
 facebook:
-  clientId: xxxxxxxxx
+  clientId: "152401872107599"
   clientSecret:
     secretKeyRef:
       key: auth.facebook.client_secret
