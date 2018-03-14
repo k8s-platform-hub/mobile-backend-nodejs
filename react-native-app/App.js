@@ -1,19 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Index from './src/components/Index';
+import { Root, Container } from 'native-base';
+import { StackNavigator } from 'react-navigation';
+import Index from './Index';
+
+const AppNavigator = StackNavigator(
+  {
+    Index: {
+      screen: Index,
+    },
+  },
+);
 
 export default class App extends React.Component {
-  render() {
+  render () {
     return (
-      <View style={styles.container}>
-        <Index />
-      </View>
-    );
+      <Root>
+        <AppNavigator />
+      </Root>
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

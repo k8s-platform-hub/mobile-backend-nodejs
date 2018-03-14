@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, Button, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Alert, Button} from 'react-native';
 import {fetchUserDetails} from '../actions'
 
 export default class DataComponent extends React.Component {
@@ -12,9 +12,10 @@ export default class DataComponent extends React.Component {
 
   async componentDidMount() {
     const dataResponse = await fetchUserDetails(this.props.token);
-    if (dataResponse.success && dataRespons.data.length > 0) {
+    console.log(dataResponse);
+    if (dataResponse.success && dataResponse.data.length > 0) {
       this.setState({
-        userDetails: dataResponse,
+        userDetails: dataResponse.data,
         loading: false,
         isError: false
       });
@@ -47,7 +48,7 @@ export default class DataComponent extends React.Component {
     const userEducation = () => {
       let educationString = '';
       for (let i = 0; i < this.state.userDetails[0].education.length; i++){
-        educationString += this.state.userDetails[0].education[i].degree + ' from ' + this.state.userDetails[0].education[i].instituion + ', '
+        educationString += this.state.userDetails[0].education[i].degree + ' from ' + this.state.userDetails[0].education[i].institution_name + ', '
       }
       return educationString.length === 0 ? '' : educationString.slice(0, educationString.length -1);
     };
@@ -63,6 +64,7 @@ export default class DataComponent extends React.Component {
         <Text>
           Eduction: {userEducation()}
         </Text>
+        <Button title="Back" onPress={this.props.goBack} />
       </View>
     )
   }

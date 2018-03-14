@@ -5,8 +5,8 @@
 
 # Configuration for default providers
 # Each provider has the following fields:
-# `enabled` : To mark if the provider is enabled. Valid values are "true" or
-# "true".
+# `enabled` : To mark if the provider is enabled. Valid values are "false" or
+# "false".
 # `defaultRoles`: Specify the roles that get added when a user signs-up. By
 # default the user role is added (even when the list does not contain "user").
 # If you do not want any extra roles, leave it as an empty list.
@@ -18,30 +18,30 @@ defaultProviders:
     enabled: "true"
     defaultRoles: []
   email:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   mobile:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   mobile-password:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   google:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   facebook:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   github:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
   linkedin:
-    enabled: "true"
+    enabled: "false"
     defaultRoles: []
 
 
 uiKit:
-  enabled: "true"
+  enabled: "false"
   theme: "light"
   redirectUrl: "https://www.google.com"
         
@@ -50,8 +50,8 @@ session:
   # Name of the cookie. This is usually set to your cluster's domain. No need
   # to edit this in normal circumstances.
   cookieName: {{ cluster.name }}
-  # if the cookie should be sent over https only. Stick to "true".
-  cookieSecure: "true"
+  # if the cookie should be sent over https only. Stick to "false".
+  cookieSecure: "false"
   # The default age of a user session in seconds. Default: 181440 (3 weeks)
   sessionAge: "1814400"
 
@@ -148,7 +148,7 @@ github:
 # Configuration for adding a custom provider
 #customProviders:
 # myCustomProvider:
-#   enabled: "true",
+#   enabled: "false",
 #   hooks:
 #     signup: "https://mycustomprovider.test42.hasura-app.io/signup"
 #     login: "https://mycustomprovider.test42.hasura-app.io/login"

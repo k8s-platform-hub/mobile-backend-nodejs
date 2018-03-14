@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import {AppLoading} from 'expo';
 import socketIOClient from 'socket.io-client';
-import AuthScreen from './AuthScreen';
 import FileComponent from './FileComponent';
 import DataComponent from './DataComponent';
 import SocketIO from './SocketIO';
@@ -17,7 +16,6 @@ export default class Index extends React.Component {
       isLoggedIn: false,
       token: null
     },
-    openAuth: false,
     openData: false,
     openFile: false,
     openSocket: false,
@@ -26,67 +24,28 @@ export default class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const session = await fetchSession();
-    console.log("================");
-    console.log(session);
-    if (session) {
-      this.setState({
-        ...this.state,
-        session: {
-          isLoggedIn: true,
-          token: session.token
-        }
-      })
-    }
-  }
-
-  tryAuth = () => {
-    if (this.state.session.isLoggedIn) {
-      Alert.alert('Message', 'Already logged in');
-    } else {
-      this.setState({...this.state, openAuth: true});
-    }
-  }
-
-  setSession = (session) => {
-    this.setState({
-      ...this.state,
-      session,
-      openAuth: false
-    })
-  }
-
-  unsetSession = () => {
     this.setState({
       ...this.state,
       session: {
-        isLoggedIn: false,
-        token: null
+        token: this.props.sessionInfo.token
       }
     })
   }
 
   openDataComponent = () => {
-    if (this.state.session.isLoggedIn) {
-      this.setState({
-        ...this.state,
-        openData: true
-      })
-    } else {
-      Alert.alert('Unauthorized', 'Please login to access this section');
-    }
+    this.setState({
+      ...this.state,
+      openData: true
+    });
   }
 
   openFileComponent = () => {
-    if (this.state.session.isLoggedIn) {
-      this.setState({
-        ...this.state,
-        openFile: true
-      })
-    } else {
-      Alert.alert('Unauthorized', 'Please login to access this section');
-    }
+    this.setState({
+      ...this.state,
+      openFile: true
+    });
   }
+
   connectToSocket = () => {
     const socket = socketIOClient(`https://api.${clusterName}.hasura-app.io`);
     this.setState({...this.state, socket, openSocket: true});
@@ -120,7 +79,6 @@ export default class Index extends React.Component {
   backToHomeScreen = () => {
     this.setState({
       ...this.state,
-      openAuth: null,
       openData: null,
       openFile: null,
       openSocket: null
@@ -131,7 +89,6 @@ export default class Index extends React.Component {
     const {
       loading,
       session,
-      openAuth,
       openData,
       openFile,
       openSocket
@@ -141,9 +98,9 @@ export default class Index extends React.Component {
       return <Expo.AppLoading />
     }
 
-    if (openAuth) {
+    if (openData) {
       return (
-        <AuthScreen goBack={this.backToHomeScreen} setSession={this.setSession}/>
+        <DataComponent goBack={this.backToHomeScreen} token={session.token} />
       )
     }
 
@@ -163,9 +120,6 @@ export default class Index extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.button}>
-          <Button title="Authentication" onPress={this.tryAuth} />
-        </View>
-        <View style={styles.button}>
           <Button title="Data" onPress={this.openDataComponent} />
         </View>
         <View style={styles.button}>
@@ -174,17 +128,9 @@ export default class Index extends React.Component {
         <View style={styles.button}>
           <Button title="Socket.io" onPress={this.connectToSocket} />
         </View>
-        {
-          session.isLoggedIn
-          ?
-          (
-            <View style={styles.button}>
-              <Button title="Logout" onPress={this.unsetSession} />
-            </View>
-          )
-          :
-          null
-        }
+        <View style={styles.button}>
+          <Button title="Logout" onPress={this.props.logoutCallback} />
+        </View>
       </View>
     );
   }
