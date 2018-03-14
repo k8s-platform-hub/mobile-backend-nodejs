@@ -14,20 +14,28 @@ export default class IndexOtp extends React.Component {
   }
 
   render() {
+    const backButton = () => {
+      if (this.props.shouldShowBackButton) {
+        return (
+          <Button transparent onPress={this.props.homeCallback}>
+            <Icon name="arrow-back" />
+          </Button>
+        );
+      }
+      return null;
+    }
     return (
       <Container>
         <Header>
           <Left>
-            <Button transparent onPress={this.props.homeCallback}>
-              <Icon name="arrow-back" />
-            </Button>
+            {backButton()}
           </Left>
           <Body>
             <Text>OTP</Text>
           </Body>
           <Right />
         </Header>
-        <Tabs initialPage={0} ref={(tabView) => {this.tabView=tabView}}>
+        <Tabs initialPage={1} ref={(tabView) => {this.tabView=tabView}}>
           <Tab heading="Signup">
             <OTP loginCallback={this.props.loginCallback} task="signup"/>
           </Tab>

@@ -15,20 +15,28 @@ export default class IndexUsername extends React.Component {
   }
 
   render() {
+    const backButton = () => {
+      if (this.props.shouldShowBackButton) {
+        return (
+          <Button transparent onPress={this.props.homeCallback}>
+            <Icon name="arrow-back" />
+          </Button>
+        );
+      }
+      return null;
+    }
     return (
       <Container>
         <Header>
           <Left>
-            <Button transparent onPress={this.props.homeCallback}>
-              <Icon name="arrow-back" />
-            </Button>
+            {backButton()}
           </Left>
           <Body>
             <Text>Username</Text>
           </Body>
           <Right />
         </Header>
-        <Tabs initialPage={0} ref={(tabView) => {this.tabView=tabView}}>
+        <Tabs initialPage={1} ref={(tabView) => {this.tabView=tabView}}>
           <Tab heading="Signup">
             <UsernameSignup loginCallback={this.props.loginCallback}/>
           </Tab>

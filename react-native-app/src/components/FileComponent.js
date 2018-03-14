@@ -24,7 +24,9 @@ export default class FileComponent extends React.Component {
     let { image } = this.state;
     if (this.state.uploading) {
       return (
-        <ActivityIndicator />
+        <View style={styles.container}>
+          <ActivityIndicator />
+        </View>
       );
     }
     return (
@@ -33,7 +35,7 @@ export default class FileComponent extends React.Component {
           <Button
             style={styles.button}
             onPress={this._pickImage}
-            title="Browse"
+            title="Upload"
           />
           <Button
             style={styles.buttonContainer}
@@ -106,15 +108,16 @@ export default class FileComponent extends React.Component {
         uploadResponse = await uploadImageAsync(pickerResult.uri, this.props.token);
         uploadResult = await uploadResponse.json();
         console.log(uploadResult);
-        this.setState({ image: `https://filestore.hasura-app.io/v1/file/${uploadResult.file_id}`});
+        this.setState({ image: `https://filestore.${clusterName}.hasura-app.io/v1/file/${uploadResult.file_id}`});
       }
     } catch (e) {
       console.log({ uploadResponse });
       console.log({ uploadResult });
       console.log({ e });
       alert('Upload failed, sorry :(');
+      this.setState({ ...this.state, uploading: false });
     } finally {
-      this.setState({ uploading: false });
+      this.setState({ ...this.state, uploading: false });
     }
   };
 }
@@ -135,7 +138,6 @@ uploadImageAsync = async (uri, token) => {
     method: 'POST',
     body: formData,
     headers: {
-      'Content-Type': 'image/png',
       'Authorization': 'Bearer ' + token
     },
   };

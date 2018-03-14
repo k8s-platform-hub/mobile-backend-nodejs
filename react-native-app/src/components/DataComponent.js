@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, Button} from 'react-native';
+import { StyleSheet, Text, View, Alert, Button, ActivityIndicator} from 'react-native';
 import {fetchUserDetails} from '../actions'
 
 export default class DataComponent extends React.Component {
@@ -40,7 +40,7 @@ export default class DataComponent extends React.Component {
     if (this.state.loading) {
       return (
         <View style={styles.container}>
-          <Expo.AppLoading />
+          <ActivityIndicator/>
         </View>
       )
     }

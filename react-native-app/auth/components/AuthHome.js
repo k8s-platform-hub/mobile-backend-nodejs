@@ -49,19 +49,22 @@ export default class AuthHome extends React.Component {
       return loginMethods;
     }
     if (authConf.username) {
-      loginMethods.push["Username"];
+      loginMethods.push("Username");
     }
     if (authConf.email) {
-      loginMethods.push["Email"];
+      loginMethods.push("Email");
     }
     if (authConf.mobileOtp) {
-      loginMethods.push["OTP"];
+      loginMethods.push("OTP");
     }
     if (authConf.googleArray) {
-      loginMethods.push["Google"];
+      loginMethods.push("Google");
     }
     if (authConf.facebook) {
-      loginMethods.push["Facebook"];
+      loginMethods.push("Facebook");
+    }
+    if (loginMethods.length === 1 && loginMethods[0] !== "Google" && loginMethods[0] !== "Facebook") {
+      this.openLoginScreen(loginMethods[0]);
     }
     this.setState({
       ...this.state, isError: false, loading: false, authConf, loginMethods
@@ -208,24 +211,20 @@ export default class AuthHome extends React.Component {
       return this.error();
     }
 
-    if (loginMethods.length === 1 && loginMethods[0] !== "Google" && loginMethods[0] !== "Facebook") {
-      this.openLoginScreen(loginMethods[0]);
-    }
-
     if (loginScreenOpen) {
       if (loginScreenOpen === 'Username') {
         return (
-          <IndexUsername homeCallback={this.backToHome} loginCallback={this.props.loginCallback} />
+          <IndexUsername homeCallback={this.backToHome} loginCallback={this.props.loginCallback} shouldShowBackButton={this.state.loginMethods.length !== 1}/>
         )
       }
       if (loginScreenOpen === 'OTP') {
         return (
-          <IndexOtp homeCallback={this.backToHome} loginCallback={this.props.loginCallback} task='login'/>
+          <IndexOtp homeCallback={this.backToHome} loginCallback={this.props.loginCallback} task='login' shouldShowBackButton={this.state.loginMethods.length !== 1}/>
         )
       }
       if (loginScreenOpen === 'Email') {
         return (
-          <IndexEmail homeCallback={this.backToHome} loginCallback={this.props.loginCallback} />
+          <IndexEmail homeCallback={this.backToHome} loginCallback={this.props.loginCallback}  shouldShowBackButton={this.state.loginMethods.length !== 1}/>
         )
       }
     }

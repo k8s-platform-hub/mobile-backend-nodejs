@@ -41,7 +41,7 @@ export default class Index extends React.Component {
     try {
       const sessionInfo = await fetchSession();
       if (sessionInfo) {
-        const userInfoResp = await this.getUserInfo();
+        const userInfoResp = await this.getUserInfo(sessionInfo);
       }
       else {
         this.stopLoadingIndicator();
@@ -60,11 +60,11 @@ export default class Index extends React.Component {
     });
   }
 
-  getUserInfo = async () => {
+  getUserInfo = async (sessionInfo) => {
     const userInfoResp = await fetch(`https://auth.${clusterName}.hasura-app.io/v1/user/info`, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + this.state.session.sessionInfo.token,
+        'Authorization': 'Bearer ' + sessionInfo.token,
         'Content-Type': 'application/json'
       }
     });
