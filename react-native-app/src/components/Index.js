@@ -64,7 +64,6 @@ export default class Index extends React.Component {
   }
 
   sendMessage = (msg) => {
-    console.log(this.state);
     console.log(msg);
     const {socket} = this.state;
     socket.emit('message', msg);
@@ -93,7 +92,6 @@ export default class Index extends React.Component {
       openFile,
       openSocket
     } = this.state;
-    console.log(this.state);
     if (loading) {
       return <Expo.AppLoading />
     }
@@ -111,7 +109,6 @@ export default class Index extends React.Component {
     }
 
     if (openSocket) {
-      console.log(this.state);
       return (
         <SocketIO messageArray={this.state.messageArray} sendMessageCallback={this.sendMessage} goBack={this.disconnectSocket}/>
       )

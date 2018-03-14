@@ -28,14 +28,15 @@ export default class SocketIO extends React.Component {
   }
 
   renderMessages = () => {
-    this.state.messageArray.map((item, index) => {
+    return this.state.messageArray.map((item, index) => {
       return (
-        <Text>{item}</Text>
+        <Text key={index}>{item}</Text>
       );
     })
   }
 
   render() {
+    console.log(this.state);
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
         <View style={styles.container}>
@@ -44,6 +45,7 @@ export default class SocketIO extends React.Component {
             <Button style={styles.button} color='grey' title="Send" onPress={() => this.props.sendMessageCallback(this.state.message)} />
             <Button style={styles.button} color='grey' title="Cancel" onPress={this.props.goBack} />
           </View>
+          {this.renderMessages()}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
-    marginTop: 80
+    paddingTop: 40
   },
   messageInput: {
     flexDirection: 'row',
